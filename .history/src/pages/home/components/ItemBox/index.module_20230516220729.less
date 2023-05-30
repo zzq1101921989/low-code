@@ -1,0 +1,39 @@
+.itemBox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .close {
+        width: 16px;
+        height: 16px;
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+    .add {
+        position: relative;
+        z-index: 9;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: 0 auto;
+        font-size: 40px;
+        color: #1e80ff80;
+        user-select: none
+    }
+    >svg{ 
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    &:hover {
+        border: 2px solid #2354f4 !important;
+        .close {
+            display: block;
+        }
+    }
+}
