@@ -4,7 +4,7 @@ import { DrawImage, Menu } from "./features";
 import styles from "./index.module.less";
 
 // 最大的间距是多少
-const maxPedding = 110
+const maxPedding = 100
 
 // 最大的边框
 const maxBorder = 0

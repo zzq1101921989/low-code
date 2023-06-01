@@ -16,8 +16,8 @@ const initContextMenu = {
 };
 
 // 每行最多能有多少box
-const maxContainerWidth = 800;
-const maxContainerHeight = 800;
+const containerWidth = 800;
+const containerHeight = 800;
 
 type DrawImageProps = {
   /**
@@ -137,7 +137,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
   const testLayoutCofig: LayoutConfig[] = [
     {
       direction: "left",
-      isTop: true,
       dirW: 1,
       dirH: 1,
       children: [
@@ -271,22 +270,20 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     layout.forEach((lay) => {
       // 子元素 布局的方向
-      const { dirW, dirH, children, direction, isTop } = lay;
+      const { dirW, dirH, children, direction } = lay;
 
       // 有子元素和没有子元素，处理方式不一样
       if (children && direction) {
-        
-        // containerWidth !== maxContainerWidth 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
-        const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
-        const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
+        const currnetW = containerWidth * dirW;
+        const currnetH = containerHeight * dirH;
 
         elements = elements.concat(
           handlerLayout(
             children,
             currnetW,
             currnetH,
-            occupyW,
-            occupyH,
+            currnetW,
+            currnetH,
             direction
           )
         );
@@ -343,21 +340,21 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     return elements;
   };
 
-  console.log(handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight));
+  console.log(handlerLayout(testLayoutCofig, containerWidth, containerHeight));
 
   return (
     <div
       ref={ele}
       style={{
         position: "relative",
-        width: maxContainerWidth,
-        height: maxContainerHeight,
+        width: containerWidth,
+        height: containerHeight,
         margin: "10px auto",
         background: "#fff",
         boxShadow: "0 0 10px #d9d6d6",
       }}
     >
-      {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
+      {handlerLayout(testLayoutCofig, containerWidth, containerHeight)}
       {/* <LayoutBox
         layoutConfig={layoutConfig}
         containerWidth={containerWidth}

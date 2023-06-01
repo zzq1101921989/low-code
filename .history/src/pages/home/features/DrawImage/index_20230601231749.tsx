@@ -277,8 +277,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       if (children && direction) {
         
         // containerWidth !== maxContainerWidth 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
-        const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
-        const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
+        const currnetW = containerWidth * dirW - (isLeftLayout && !isTop ? (padding / 2) : 0);
+        const currnetH = containerHeight * dirH - (isTopLayout && !isTop ? (padding / 2) : 0);
 
         elements = elements.concat(
           handlerLayout(

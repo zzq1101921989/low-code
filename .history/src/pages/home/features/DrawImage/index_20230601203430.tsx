@@ -16,8 +16,8 @@ const initContextMenu = {
 };
 
 // 每行最多能有多少box
-const maxContainerWidth = 800;
-const maxContainerHeight = 800;
+const containerWidth = 800;
+const containerHeight = 800;
 
 type DrawImageProps = {
   /**
@@ -137,7 +137,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
   const testLayoutCofig: LayoutConfig[] = [
     {
       direction: "left",
-      isTop: true,
       dirW: 1,
       dirH: 1,
       children: [
@@ -158,45 +157,13 @@ const DrawImage: FC<DrawImageProps> = (props) => {
             {
               dirW: 1,
               dirH: 0.7,
-              direction: "left",
-              children: [
-                  {
-                    dirW: 0.3,
-                    dirH: 1,
-                  },
-                  {
-                    type: "flag",
-                    dirW: 0,
-                    dirH: 0,
-                  },
-                  {
-                    dirW: 0.7,
-                    dirH: 1,
-                    direction: "top",
-                    children: [
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                      {
-                        type: "flag",
-                        dirW: 0,
-                        dirH: 0,
-                      },
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                    ]
-                  },
-              ]
             },
           ],
         },
         {
           type: "flag",
-          dirW: 0,
-          dirH: 0,
+          dirW: 0.7,
+          dirH: 1,
         },
         {
           dirW: 0.3,
@@ -250,91 +217,104 @@ const DrawImage: FC<DrawImageProps> = (props) => {
    * @param layout 当前配置
    * @param containerWidth 父级容器的宽度
    * @param containerHeight 父级容器的高度
+   * @param occupyWidth 已经布局了多少宽度
+   * @param occupyHeight 已经布局了多少高度
+   * @param containerHeight 父级容器的高度
    */
   const handlerLayout = (
     layout: LayoutConfig[],
     containerWidth: number,
     containerHeight: number,
-    occupyWidth?: number,
-    occupyHeight?: number,
+    occupyWidth: number,
+    occupyHeight: number，
     parentDirection: string = "left"
   ) => {
     let elements: ReactNode[] = [];
 
-    // 已经占据了多少呢？
-    let occupyW = occupyWidth || 0;
-    let occupyH = occupyHeight || 0;
-
-    // 获取父容器的布局方式
-    const isLeftLayout = parentDirection === "left";
-    const isTopLayout = parentDirection === "top";
-
     layout.forEach((lay) => {
+
       // 子元素 布局的方向
-      const { dirW, dirH, children, direction, isTop } = lay;
+      const { dirW, dirH, children, direction } = lay;
 
       // 有子元素和没有子元素，处理方式不一样
       if (children && direction) {
-        
-        // containerWidth !== maxContainerWidth 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
-        const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
-        const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
+
+        const currnetW = containerWidth * dirW
+        const currnetH = containerHeight * dirH
 
         elements = elements.concat(
           handlerLayout(
             children,
             currnetW,
             currnetH,
-            occupyW,
-            occupyH,
             direction
           )
         );
 
-        if (isLeftLayout) occupyW += currnetW;
-        if (isTopLayout) occupyH += currnetH;
+        if (parentDirection === 'left') occupyWidth += currnetW
+        if (parentDirection === 'top') occupyHeight += currnetH;
+
       } else {
         const { dirH, dirW, type } = lay;
 
+        console.log(lay, 'lay---------');
+        console.log(occupyWidth, 'occupyWidth');
+        console.log(occupyHeight, 'occupyHeight');
+        
+
+        // 获取父容器的布局方式
+        const isLeftLayout = parentDirection === "left";
+        const isTopLayout = parentDirection === "top";
+
         if (type !== "flag") {
           // 不同方向之下，改变的宽高也是不一样的
-          const currentWidth = containerWidth * dirW - (isLeftLayout ? padding / 2 : 0);
-          const currentHeight = containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
+          const currentWidth = isLeftLayout
+            ? containerWidth * dirW - padding / 2
+            : containerWidth * dirW;
+          const currentHeight = isTopLayout
+            ? containerHeight * dirH - padding / 2
+            : containerHeight * dirH;
 
           elements.push(
-            createrItemBox(currentWidth, currentHeight, occupyW, occupyH)
+            createrItemBox(
+              currentWidth,
+              currentHeight,
+              occupyWidth,
+              occupyHeight
+            )
           );
-          if (isLeftLayout) occupyW += currentWidth;
-          if (isTopLayout) occupyH += currentHeight;
+          if (isLeftLayout) occupyWidth += currentWidth;
+          if (isTopLayout) occupyHeight += currentHeight;
         } else {
+          
           if (isLeftLayout) {
             elements.push(
               <div
                 key={Math.random() * 100000}
                 style={{
                   position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
+                  left: occupyWidth,
+                  top: occupyHeight,
                   width: padding,
                   height: containerHeight,
                 }}
               ></div>
             );
-            occupyW += padding;
+            occupyWidth += padding;
           } else if (isTopLayout) {
             elements.push(
               <div
                 key={Math.random() * 100000}
                 style={{
                   position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
+                  left: occupyWidth,
+                  top: occupyHeight,
                   width: containerWidth,
                   height: padding,
                 }}
               ></div>
             );
-            occupyH += padding;
+            occupyHeight += padding;
           }
         }
       }
@@ -343,21 +323,21 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     return elements;
   };
 
-  console.log(handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight));
+  console.log(handlerLayout(testLayoutCofig, containerWidth, containerHeight, 0, 0));
 
   return (
     <div
       ref={ele}
       style={{
         position: "relative",
-        width: maxContainerWidth,
-        height: maxContainerHeight,
+        width: containerWidth,
+        height: containerHeight,
         margin: "10px auto",
         background: "#fff",
         boxShadow: "0 0 10px #d9d6d6",
       }}
     >
-      {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
+      {handlerLayout(testLayoutCofig, containerWidth, containerHeight, 0, 0)}
       {/* <LayoutBox
         layoutConfig={layoutConfig}
         containerWidth={containerWidth}

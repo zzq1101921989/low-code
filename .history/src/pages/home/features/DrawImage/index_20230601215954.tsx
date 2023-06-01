@@ -16,8 +16,8 @@ const initContextMenu = {
 };
 
 // 每行最多能有多少box
-const maxContainerWidth = 800;
-const maxContainerHeight = 800;
+const containerWidth = 800;
+const containerHeight = 800;
 
 type DrawImageProps = {
   /**
@@ -137,7 +137,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
   const testLayoutCofig: LayoutConfig[] = [
     {
       direction: "left",
-      isTop: true,
       dirW: 1,
       dirH: 1,
       children: [
@@ -158,45 +157,13 @@ const DrawImage: FC<DrawImageProps> = (props) => {
             {
               dirW: 1,
               dirH: 0.7,
-              direction: "left",
-              children: [
-                  {
-                    dirW: 0.3,
-                    dirH: 1,
-                  },
-                  {
-                    type: "flag",
-                    dirW: 0,
-                    dirH: 0,
-                  },
-                  {
-                    dirW: 0.7,
-                    dirH: 1,
-                    direction: "top",
-                    children: [
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                      {
-                        type: "flag",
-                        dirW: 0,
-                        dirH: 0,
-                      },
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                    ]
-                  },
-              ]
             },
           ],
         },
         {
           type: "flag",
-          dirW: 0,
-          dirH: 0,
+          dirW: 0.7,
+          dirH: 1,
         },
         {
           dirW: 0.3,
@@ -271,14 +238,12 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     layout.forEach((lay) => {
       // 子元素 布局的方向
-      const { dirW, dirH, children, direction, isTop } = lay;
+      const { dirW, dirH, children, direction } = lay;
 
       // 有子元素和没有子元素，处理方式不一样
       if (children && direction) {
-        
-        // containerWidth !== maxContainerWidth 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
-        const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
-        const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
+        const currnetW = containerWidth * dirW - (isLeftLayout ? (padding / 2) : 0);
+        const currnetH = containerHeight * dirH - (isTopLayout ? (padding / 2) : 0);
 
         elements = elements.concat(
           handlerLayout(
@@ -298,8 +263,12 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
         if (type !== "flag") {
           // 不同方向之下，改变的宽高也是不一样的
-          const currentWidth = containerWidth * dirW - (isLeftLayout ? padding / 2 : 0);
-          const currentHeight = containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
+          const currentWidth = isLeftLayout
+            ? containerWidth * dirW - padding / 2
+            : containerWidth * dirW;
+          const currentHeight = isTopLayout
+            ? containerHeight * dirH - padding / 2
+            : containerHeight * dirH;
 
           elements.push(
             createrItemBox(currentWidth, currentHeight, occupyW, occupyH)
@@ -313,8 +282,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
                 key={Math.random() * 100000}
                 style={{
                   position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
+                  left: occupyWidth,
+                  top: occupyHeight,
                   width: padding,
                   height: containerHeight,
                 }}
@@ -327,8 +296,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
                 key={Math.random() * 100000}
                 style={{
                   position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
+                  left: occupyWidth,
+                  top: occupyHeight,
                   width: containerWidth,
                   height: padding,
                 }}
@@ -343,21 +312,21 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     return elements;
   };
 
-  console.log(handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight));
+  console.log(handlerLayout(testLayoutCofig, containerWidth, containerHeight));
 
   return (
     <div
       ref={ele}
       style={{
         position: "relative",
-        width: maxContainerWidth,
-        height: maxContainerHeight,
+        width: containerWidth,
+        height: containerHeight,
         margin: "10px auto",
         background: "#fff",
         boxShadow: "0 0 10px #d9d6d6",
       }}
     >
-      {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
+      {handlerLayout(testLayoutCofig, containerWidth, containerHeight)}
       {/* <LayoutBox
         layoutConfig={layoutConfig}
         containerWidth={containerWidth}
