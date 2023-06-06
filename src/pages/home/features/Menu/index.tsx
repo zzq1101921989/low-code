@@ -1,12 +1,12 @@
 import { Slider, Space, Tabs, TabsProps } from "antd";
 import { Dispatch, FC } from "react";
-import { Area } from "..";
 import {
   ColorIcon,
   ImageIcon,
   LayoutIcon,
   TextIcon,
 } from "../../../../components/icon";
+import { Area } from "../../components";
 
 type MenuProps = {
   /**

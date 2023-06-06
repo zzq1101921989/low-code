@@ -6,8 +6,112 @@ import {
   useRef,
   useState,
 } from "react";
-import { ContextMenu, ItemBox } from "../../components";
-import { LayoutConfig } from "./LayoutBox";
+import { ItemBox } from "../../components";
+import ContextMenu from "../Contextmenu";
+import SeparateLine from "../SeparateLine";
+
+  /**
+   * direction 代表排列方向
+   * width 取小数，代表的是百分比
+   */
+  const testLayoutCofig: LayoutConfig[] = [
+    {
+      direction: "left",
+      isTop: true,
+      dirW: 1,
+      dirH: 1,
+      children: [
+        {
+          dirW: 0.7,
+          dirH: 1,
+          direction: "top",
+          children: [
+            {
+              dirW: 1,
+              dirH: 0.3,
+              key: Math.random() * 100000
+            },
+            {
+              type: "flag",
+              dirW: 1,
+              dirH: 1,
+              key: Math.random() * 100000
+            },
+            {
+              dirW: 1,
+              dirH: 0.7,
+              direction: "left",
+              children: [
+                  {
+                    dirW: 0.3,
+                    dirH: 1,
+                    key: Math.random() * 100000
+                  },
+                  {
+                    type: "flag",
+                    dirW: 0,
+                    dirH: 0,
+                    key: Math.random() * 100000
+                  },
+                  {
+                    dirW: 0.7,
+                    dirH: 1,
+                    direction: "top",
+                    children: [
+                      {
+                        dirW: 1,
+                        dirH: 0.5,
+                        key: Math.random() * 100000
+                      },
+                      {
+                        type: "flag",
+                        dirW: 0,
+                        dirH: 0,
+                        key: Math.random() * 100000
+                      },
+                      {
+                        dirW: 1,
+                        dirH: 0.5,
+                        key: Math.random() * 100000
+                      },
+                    ]
+                  },
+              ]
+            },
+          ],
+        },
+        {
+          type: "flag",
+          dirW: 0,
+          dirH: 0,
+          key: Math.random() * 100000
+        },
+        {
+          dirW: 0.3,
+          dirH: 1,
+          direction: "top",
+          children: [
+            {
+              dirW: 1,
+              dirH: 0.5,
+              key: Math.random() * 100000
+            },
+            {
+              type: "flag",
+              dirW: 1,
+              dirH: 1,
+              key: Math.random() * 100000
+            },
+            {
+              dirW: 1,
+              dirH: 0.5,
+              key: Math.random() * 100000
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
 const initContextMenu = {
   open: false,
@@ -18,6 +122,19 @@ const initContextMenu = {
 // 每行最多能有多少box
 const maxContainerWidth = 800;
 const maxContainerHeight = 800;
+
+export type Direction = 'top' | 'left'
+
+export type LayoutConfig = {
+  isTop?: boolean
+  direction?: Direction
+  // 这种代表的是中间拖拉的组件，用于拖拉宽度或者高度的
+  type?: 'flag'
+  dirW: number,
+  dirH: number,
+  key?: any,
+  children?: LayoutConfig[]
+}
 
 type DrawImageProps = {
   /**
@@ -54,6 +171,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     const mousedownFn = (e: MouseEvent) => {
       if (e.target && (e.button === 0 || e.button === 2)) {
+
         // 获取上传区域的dom
         const type = (e.target as HTMLElement).getAttribute("data-type");
         const index = (e.target as HTMLElement).getAttribute("data-index");
@@ -127,112 +245,19 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     };
   }, []);
 
-  // 定义一个索引，表示每个ItemBox的编号
-  let itemIndex = 0;
-
-  /**
-   * direction 代表排列方向
-   * width 取小数，代表的是百分比
-   */
-  const testLayoutCofig: LayoutConfig[] = [
-    {
-      direction: "left",
-      isTop: true,
-      dirW: 1,
-      dirH: 1,
-      children: [
-        {
-          dirW: 0.7,
-          dirH: 1,
-          direction: "top",
-          children: [
-            {
-              dirW: 1,
-              dirH: 0.3,
-            },
-            {
-              type: "flag",
-              dirW: 1,
-              dirH: 1,
-            },
-            {
-              dirW: 1,
-              dirH: 0.7,
-              direction: "left",
-              children: [
-                  {
-                    dirW: 0.3,
-                    dirH: 1,
-                  },
-                  {
-                    type: "flag",
-                    dirW: 0,
-                    dirH: 0,
-                  },
-                  {
-                    dirW: 0.7,
-                    dirH: 1,
-                    direction: "top",
-                    children: [
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                      {
-                        type: "flag",
-                        dirW: 0,
-                        dirH: 0,
-                      },
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                      },
-                    ]
-                  },
-              ]
-            },
-          ],
-        },
-        {
-          type: "flag",
-          dirW: 0,
-          dirH: 0,
-        },
-        {
-          dirW: 0.3,
-          dirH: 1,
-          direction: "top",
-          children: [
-            {
-              dirW: 1,
-              dirH: 0.5,
-            },
-            {
-              type: "flag",
-              dirW: 1,
-              dirH: 1,
-            },
-            {
-              dirW: 1,
-              dirH: 0.5,
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
   const createrItemBox = (
     width: number,
     height: number,
     left: number,
-    top: number
+    top: number,
+    key: any
   ) => {
+
     return createElement(
       "div",
       {
         className: "edit-container",
-        key: Math.random() * 100000,
+        key,
         style: {
           position: "absolute",
           left,
@@ -241,7 +266,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           height,
         },
       },
-      <ItemBox dataIndex={0} />
+      <ItemBox dataIndex={key} activeIndex={activeBoxIndex} />
     );
   };
 
@@ -271,12 +296,12 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     layout.forEach((lay) => {
       // 子元素 布局的方向
-      const { dirW, dirH, children, direction, isTop } = lay;
+      const { dirW, dirH, children, direction, isTop, key } = lay;
 
       // 有子元素和没有子元素，处理方式不一样
       if (children && direction) {
         
-        // containerWidth !== maxContainerWidth 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
+        // !isTop 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
         const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
         const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
 
@@ -294,7 +319,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
         if (isLeftLayout) occupyW += currnetW;
         if (isTopLayout) occupyH += currnetH;
       } else {
-        const { dirH, dirW, type } = lay;
+        const { dirH, dirW, type, key } = lay;
 
         if (type !== "flag") {
           // 不同方向之下，改变的宽高也是不一样的
@@ -302,37 +327,33 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           const currentHeight = containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
 
           elements.push(
-            createrItemBox(currentWidth, currentHeight, occupyW, occupyH)
+            createrItemBox(currentWidth, currentHeight, occupyW, occupyH, key)
           );
           if (isLeftLayout) occupyW += currentWidth;
           if (isTopLayout) occupyH += currentHeight;
         } else {
           if (isLeftLayout) {
             elements.push(
-              <div
-                key={Math.random() * 100000}
-                style={{
-                  position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
-                  width: padding,
-                  height: containerHeight,
-                }}
-              ></div>
+              <SeparateLine 
+                key={key}
+                left={occupyW}
+                top={occupyH}
+                width={padding}
+                height={containerHeight} 
+                direction='left'
+              />
             );
             occupyW += padding;
           } else if (isTopLayout) {
             elements.push(
-              <div
+              <SeparateLine 
                 key={Math.random() * 100000}
-                style={{
-                  position: "absolute",
-                  left: occupyW,
-                  top: occupyH,
-                  width: containerWidth,
-                  height: padding,
-                }}
-              ></div>
+                left={occupyW}
+                top={occupyH}
+                width={containerWidth}
+                height={padding} 
+                direction='top'
+              />
             );
             occupyH += padding;
           }
@@ -342,8 +363,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     return elements;
   };
-
-  console.log(handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight));
 
   return (
     <div
@@ -358,43 +377,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       }}
     >
       {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
-      {/* <LayoutBox
-        layoutConfig={layoutConfig}
-        containerWidth={containerWidth}
-        containerHeight={containerHeight}
-        padding={padding}
-      /> */}
-
-      {/* <Row gutter={[16, 16]} style={{ height: "100%" }}>
-        <Col span={24}>
-          <ItemBox areaHeight={2 * 200} dataIndex={itemIndex} activeIndex={activeBoxIndex} />
-        </Col>
-        <Col span={24}>
-          <Row gutter={[16, 16]} style={{ height: "100%" }}>
-            <Col span={12}>
-              <ItemBox areaHeight={2 * 200} dataIndex={++itemIndex} activeIndex={activeBoxIndex} />
-            </Col>
-            <Col span={12}>
-              <Row gutter={[16, 16]} style={{ height: "100%" }}>
-                <Col span={24}>
-                  <ItemBox
-                    areaHeight={200}
-                    dataIndex={++itemIndex}
-                    activeIndex={activeBoxIndex}
-                  />
-                </Col>
-                <Col span={24}>
-                  <ItemBox
-                    areaHeight={200}
-                    dataIndex={++itemIndex}
-                    activeIndex={activeBoxIndex}
-                  />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row> */}
       <ContextMenu
         left={contextMenu.x}
         top={contextMenu.y}
