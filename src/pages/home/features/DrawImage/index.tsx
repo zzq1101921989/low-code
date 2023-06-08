@@ -43,7 +43,7 @@ import SeparateLine from "../SeparateLine";
               direction: "left",
               children: [
                   {
-                    dirW: 0.3,
+                    dirW: 0.4,
                     dirH: 1,
                     key: Math.random() * 100000
                   },
@@ -54,7 +54,7 @@ import SeparateLine from "../SeparateLine";
                     key: Math.random() * 100000
                   },
                   {
-                    dirW: 0.7,
+                    dirW: 0.6,
                     dirH: 1,
                     direction: "top",
                     children: [
@@ -120,8 +120,8 @@ const initContextMenu = {
 };
 
 // 每行最多能有多少box
-const maxContainerWidth = 800;
-const maxContainerHeight = 800;
+export const maxContainerWidth = 800;
+export const maxContainerHeight = 800;
 
 export type Direction = 'top' | 'left'
 
