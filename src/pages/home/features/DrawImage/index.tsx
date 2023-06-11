@@ -9,109 +9,112 @@ import {
 import { ItemBox } from "../../components";
 import ContextMenu from "../Contextmenu";
 import SeparateLine from "../SeparateLine";
+import styles from './index.module.less';
 
-  /**
-   * direction 代表排列方向
-   * width 取小数，代表的是百分比
-   */
-  const testLayoutCofig: LayoutConfig[] = [
-    {
-      direction: "left",
-      isTop: true,
-      dirW: 1,
-      dirH: 1,
-      children: [
-        {
-          dirW: 0.7,
-          dirH: 1,
-          direction: "top",
-          children: [
-            {
-              dirW: 1,
-              dirH: 0.3,
-              key: Math.random() * 100000
-            },
-            {
-              type: "flag",
-              dirW: 1,
-              dirH: 1,
-              key: Math.random() * 100000
-            },
-            {
-              dirW: 1,
-              dirH: 0.7,
-              direction: "left",
-              children: [
-                  {
-                    dirW: 0.4,
-                    dirH: 1,
-                    key: Math.random() * 100000
-                  },
-                  {
-                    type: "flag",
-                    dirW: 0,
-                    dirH: 0,
-                    key: Math.random() * 100000
-                  },
-                  {
-                    dirW: 0.6,
-                    dirH: 1,
-                    direction: "top",
-                    children: [
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                        key: Math.random() * 100000
-                      },
-                      {
-                        type: "flag",
-                        dirW: 0,
-                        dirH: 0,
-                        key: Math.random() * 100000
-                      },
-                      {
-                        dirW: 1,
-                        dirH: 0.5,
-                        key: Math.random() * 100000
-                      },
-                    ]
-                  },
-              ]
-            },
-          ],
-        },
-        {
-          type: "flag",
-          dirW: 0,
-          dirH: 0,
-          key: Math.random() * 100000
-        },
-        {
-          dirW: 0.3,
-          dirH: 1,
-          direction: "top",
-          children: [
-            {
-              dirW: 1,
-              dirH: 0.5,
-              key: Math.random() * 100000
-            },
-            {
-              type: "flag",
-              dirW: 1,
-              dirH: 1,
-              key: Math.random() * 100000
-            },
-            {
-              dirW: 1,
-              dirH: 0.5,
-              key: Math.random() * 100000
-            },
-          ],
-        },
-      ],
-    },
-  ];
+/**
+ * direction 代表排列方向
+ * width 取小数，代表的是百分比
+ */
+const testLayoutCofig: LayoutConfig[] = [
+  {
+    direction: "left",
+    isTop: true,
+    dirW: 1,
+    dirH: 1,
+    children: [
+      {
+        dirW: 0.7,
+        dirH: 1,
+        key: Math.random() * 100000,
+        // direction: "top",
+        // children: [
+        //   {
+        //     dirW: 1,
+        //     dirH: 0.3,
+        //     key: Math.random() * 100000,
+        //   },
+        //   {
+        //     type: "flag",
+        //     dirW: 1,
+        //     dirH: 1,
+        //     key: Math.random() * 100000,
+        //   },
+        //   {
+        //     dirW: 1,
+        //     dirH: 0.7,
+        //     direction: "left",
+        //     children: [
+        //       {
+        //         dirW: 0.4,
+        //         dirH: 1,
+        //         key: Math.random() * 100000,
+        //       },
+        //       {
+        //         type: "flag",
+        //         dirW: 0,
+        //         dirH: 0,
+        //         key: Math.random() * 100000,
+        //       },
+        //       {
+        //         dirW: 0.6,
+        //         dirH: 1,
+        //         direction: "top",
+        //         children: [
+        //           {
+        //             dirW: 1,
+        //             dirH: 0.5,
+        //             key: Math.random() * 100000,
+        //           },
+        //           {
+        //             type: "flag",
+        //             dirW: 0,
+        //             dirH: 0,
+        //             key: Math.random() * 100000,
+        //           },
+        //           {
+        //             dirW: 1,
+        //             dirH: 0.5,
+        //             key: Math.random() * 100000,
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //   },
+        // ],
+      },
+      {
+        type: "flag",
+        dirW: 0,
+        dirH: 0,
+        key: Math.random() * 100000,
+      },
+      {
+        dirW: 0.3,
+        dirH: 1,
+        key: Math.random() * 100000,
+        // direction: "top",
+        // children: [
+        //   {
+        //     dirW: 1,
+        //     dirH: 0.5,
+        //     key: Math.random() * 100000,
+        //   },
+        //   {
+        //     type: "flag",
+        //     dirW: 1,
+        //     dirH: 1,
+        //     key: Math.random() * 100000,
+        //   },
+        //   {
+        //     dirW: 1,
+        //     dirH: 0.5,
+        //     key: Math.random() * 100000,
+        //   },
+        // ],
+      },
+    ],
+  },
+];
 
 const initContextMenu = {
   open: false,
@@ -123,18 +126,18 @@ const initContextMenu = {
 export const maxContainerWidth = 800;
 export const maxContainerHeight = 800;
 
-export type Direction = 'top' | 'left'
+export type Direction = "top" | "left";
 
 export type LayoutConfig = {
-  isTop?: boolean
-  direction?: Direction
+  isTop?: boolean;
+  direction?: Direction;
   // 这种代表的是中间拖拉的组件，用于拖拉宽度或者高度的
-  type?: 'flag'
-  dirW: number,
-  dirH: number,
-  key?: any,
-  children?: LayoutConfig[]
-}
+  type?: "flag";
+  dirW: number;
+  dirH: number;
+  key?: any;
+  children?: LayoutConfig[];
+};
 
 type DrawImageProps = {
   /**
@@ -171,7 +174,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     const mousedownFn = (e: MouseEvent) => {
       if (e.target && (e.button === 0 || e.button === 2)) {
-
         // 获取上传区域的dom
         const type = (e.target as HTMLElement).getAttribute("data-type");
         const index = (e.target as HTMLElement).getAttribute("data-index");
@@ -252,7 +254,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     top: number,
     key: any
   ) => {
-
     return createElement(
       "div",
       {
@@ -266,7 +267,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           height,
         },
       },
-      <ItemBox dataIndex={key} activeIndex={activeBoxIndex} />
+      <ItemBox dataIndex={key} activeIndex={activeBoxIndex} width={width} height={height} />
     );
   };
 
@@ -300,10 +301,11 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
       // 有子元素和没有子元素，处理方式不一样
       if (children && direction) {
-        
         // !isTop 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
-        const currnetW = containerWidth * dirW - ( (isLeftLayout && !isTop)  ? (padding / 2) : 0);
-        const currnetH = containerHeight * dirH - ( (isTopLayout && !isTop)  ? (padding / 2) : 0);
+        const currnetW =
+          containerWidth * dirW - (isLeftLayout && !isTop ? padding / 2 : 0);
+        const currnetH =
+          containerHeight * dirH - (isTopLayout && !isTop ? padding / 2 : 0);
 
         elements = elements.concat(
           handlerLayout(
@@ -323,9 +325,11 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
         if (type !== "flag") {
           // 不同方向之下，改变的宽高也是不一样的
-          const currentWidth = containerWidth * dirW - (isLeftLayout ? padding / 2 : 0);
-          const currentHeight = containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
-
+          const currentWidth =
+            containerWidth * dirW - (isLeftLayout ? padding / 2 : 0);
+          const currentHeight =
+            containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
+          
           elements.push(
             createrItemBox(currentWidth, currentHeight, occupyW, occupyH, key)
           );
@@ -334,25 +338,25 @@ const DrawImage: FC<DrawImageProps> = (props) => {
         } else {
           if (isLeftLayout) {
             elements.push(
-              <SeparateLine 
+              <SeparateLine
                 key={key}
                 left={occupyW}
                 top={occupyH}
                 width={padding}
-                height={containerHeight} 
-                direction='left'
+                height={containerHeight}
+                direction="left"
               />
             );
             occupyW += padding;
           } else if (isTopLayout) {
             elements.push(
-              <SeparateLine 
+              <SeparateLine
                 key={Math.random() * 100000}
                 left={occupyW}
                 top={occupyH}
                 width={containerWidth}
-                height={padding} 
-                direction='top'
+                height={padding}
+                direction="top"
               />
             );
             occupyH += padding;
@@ -366,6 +370,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
   return (
     <div
+      className={styles.drawImageContainer}
       ref={ele}
       style={{
         position: "relative",

@@ -26,8 +26,8 @@ const SeparateLine: FC<SeparateLineProps> = (props) => {
         className={styles.line}
         style={{
             cursor: direction === 'left' ? 'e-resize' : 'n-resize',
-            width: direction === 'left' ? width * 0.2 : width,
-            height: direction === 'top' ? height * 0.2 : height
+            width: direction === 'left' ? 4 : width,
+            height: direction === 'top' ? 4 : height
         }}
       />
     </div>

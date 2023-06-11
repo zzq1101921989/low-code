@@ -33,6 +33,10 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
     pendingDrawCanvasImageList.forEach(item => {
         ctx?.drawImage(
             item.img,
+            0,
+            0,
+            item.width,
+            item.height,
             item.left,
             item.top,
             item.width,

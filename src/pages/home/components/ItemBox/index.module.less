@@ -2,7 +2,17 @@
     position: relative;
     width: 100%;
     height: 100%;
-    box-sizing: border-box;
+    overflow: hidden;
+    &:hover {
+        :global {
+            .item-border {
+                border: 2px solid #2354f4 !important;
+            }
+        }
+        .close {
+            display: block;
+        }
+    }
     .close {
         width: 16px;
         height: 16px;
@@ -30,11 +40,5 @@
         position: absolute;
         left: 0;
         top: 0;
-    }
-    &:hover {
-        border: 2px solid #2354f4 !important;
-        .close {
-            display: block;
-        }
     }
 }

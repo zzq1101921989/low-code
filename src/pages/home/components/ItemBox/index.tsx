@@ -12,31 +12,43 @@ interface ItemBoxProps {
    */
   dataIndex: number;
 
+  width: number;
+
+  height: number;
 }
 
 const ItemBox: FC<ItemBoxProps> = (props) => {
-
-  const { activeIndex, dataIndex } = props;
+  
+  const { activeIndex, dataIndex, width, height } = props;
 
   const [openAddMask, setOpenAddMask] = useState(true);
 
-  const image = useRef<SVGImageElement | null>(null)
+  const image = useRef<SVGImageElement | null>(null);
 
-  image.current?.addEventListener('load', () => {
-    setOpenAddMask(false)
-  })
+  image.current?.addEventListener("load", () => {
+    setOpenAddMask(false);
+  });
 
-  return (
-    <div
-      className={styles.itemBox}
-      style={{
+  const handlerBorder = () => {
+    if (openAddMask) {
+      return {
         border: `2px ${
           activeIndex === dataIndex ? "solid #2354f4" : "dashed #1e80ff80"
-        }`,
-      }}
-    >
+        }`
+      }
+    } else if (!openAddMask && activeIndex === dataIndex) {
+      return {
+        border: '2px solid #2354f4'
+      }
+    } else {
+      return {}
+    }
+  }
+
+  return (
+    <div className={styles.itemBox}>
       <svg
-        view-box="0 0 367.3725 367.3725"
+        view-box={`0 0 ${width} ${height}`}
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
       >
@@ -48,6 +60,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
           <image ref={image} />
         </g>
       </svg>
+
+      {/* 叉叉 */}
       <span className={styles.close}>
         <svg
           version="1.1"
@@ -70,6 +84,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
           </g>
         </svg>
       </span>
+
+      {/* 加号 */}
       <span
         style={{
           display: openAddMask ? "flex" : "none",
@@ -77,9 +93,21 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
         className={styles.add}
         data-type="add"
         data-index={dataIndex}
-      >
-        +
-      </span>
+      >+</span>
+
+      {/* 边框 */}
+      <div
+        className="item-border"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width,
+          height,
+          ...handlerBorder(),
+          boxSizing: 'border-box'
+        }}
+      ></div>
     </div>
   );
 };
