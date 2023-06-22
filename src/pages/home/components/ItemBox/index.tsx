@@ -12,13 +12,18 @@ interface ItemBoxProps {
    */
   dataIndex: number;
 
+  /**
+   * 容器的宽
+   */
   width: number;
 
+  /**
+   * 容器的高
+   */
   height: number;
 }
 
 const ItemBox: FC<ItemBoxProps> = (props) => {
-  
   const { activeIndex, dataIndex, width, height } = props;
 
   const [openAddMask, setOpenAddMask] = useState(true);
@@ -34,16 +39,26 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
       return {
         border: `2px ${
           activeIndex === dataIndex ? "solid #2354f4" : "dashed #1e80ff80"
-        }`
-      }
+        }`,
+      };
     } else if (!openAddMask && activeIndex === dataIndex) {
       return {
-        border: '2px solid #2354f4'
-      }
+        border: "2px solid #2354f4",
+      };
     } else {
-      return {}
+      return {};
     }
-  }
+  };
+
+  // 图片的高度
+  const imageWidth = image.current?.getBoundingClientRect().width;
+  const imageHeight = image.current?.getBoundingClientRect().height;
+
+  // 计算高度缩放比例
+  const scaleRatio = imageHeight ? height / imageHeight : 0;
+
+  // 宽度固定的同时，计算等比宽度，防图片变形
+  const scaleRatioImageWidth = imageWidth ? imageWidth * scaleRatio : 0;
 
   return (
     <div className={styles.itemBox}>
@@ -57,7 +72,11 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
             transform: "matrix(1, 0, 0, 1, 0, 0)",
           }}
         >
-          <image ref={image} />
+          <image
+            ref={image}
+            {...(scaleRatioImageWidth && { width: scaleRatioImageWidth })}
+            height={height}
+          />
         </g>
       </svg>
 
@@ -93,7 +112,9 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
         className={styles.add}
         data-type="add"
         data-index={dataIndex}
-      >+</span>
+      >
+        +
+      </span>
 
       {/* 边框 */}
       <div
@@ -105,7 +126,7 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
           width,
           height,
           ...handlerBorder(),
-          boxSizing: 'border-box'
+          boxSizing: "border-box",
         }}
       ></div>
     </div>

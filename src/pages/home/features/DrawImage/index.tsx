@@ -9,7 +9,7 @@ import {
 import { ItemBox } from "../../components";
 import ContextMenu from "../Contextmenu";
 import SeparateLine from "../SeparateLine";
-import styles from './index.module.less';
+import styles from "./index.module.less";
 
 /**
  * direction 代表排列方向
@@ -92,25 +92,25 @@ const testLayoutCofig: LayoutConfig[] = [
         dirW: 0.3,
         dirH: 1,
         key: Math.random() * 100000,
-        // direction: "top",
-        // children: [
-        //   {
-        //     dirW: 1,
-        //     dirH: 0.5,
-        //     key: Math.random() * 100000,
-        //   },
-        //   {
-        //     type: "flag",
-        //     dirW: 1,
-        //     dirH: 1,
-        //     key: Math.random() * 100000,
-        //   },
-        //   {
-        //     dirW: 1,
-        //     dirH: 0.5,
-        //     key: Math.random() * 100000,
-        //   },
-        // ],
+        direction: "top",
+        children: [
+          {
+            dirW: 1,
+            dirH: 0.5,
+            key: Math.random() * 100000,
+          },
+          {
+            type: "flag",
+            dirW: 1,
+            dirH: 1,
+            key: Math.random() * 100000,
+          },
+          {
+            dirW: 1,
+            dirH: 0.5,
+            key: Math.random() * 100000,
+          },
+        ],
       },
     ],
   },
@@ -144,10 +144,15 @@ type DrawImageProps = {
    * 间距
    */
   padding: number;
+
+  /**
+   * 当前选中的色块
+   */
+  color: string;
 };
 
 const DrawImage: FC<DrawImageProps> = (props) => {
-  const { padding } = props;
+  const { padding, color } = props;
 
   const ele = useRef<HTMLDivElement | null>(null);
 
@@ -199,14 +204,38 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       fileRef.current?.click();
     };
 
-    const readerFile = (e: any) => {
+    /**
+     * 通过image标签获取图片源的真实大小
+     * @param urlData 
+     * @returns 
+     */
+    const saveOriginImageSize = (urlData: string): Promise<{ width: number, height: number }> => {
+      return new Promise((resolve) => {
+        let img: HTMLImageElement | null = new Image();
+        // 图像加载完成后的回调函数
+        img.onload = function () {
+          // 获取图像的宽度和高度
+          const width = img!.width;
+          const height = img!.height;
+          img = null;
+          resolve({
+            width,
+            height
+          })
+        };
+        // 将图像的源设置为已加载的图片数据
+        img.src = urlData;
+      });
+    };
+
+    const readerFile = async (e: any) => {
       const file = e.target.files[0];
       const urlData = URL.createObjectURL(file);
       const container = pendingUplaodBox.current as HTMLElement;
       const image = container.getElementsByTagName("image")[0];
       if (image) {
-        const clientWidth = container.clientWidth;
-        const clientHeight = container.clientHeight;
+
+        const { width, height } = await saveOriginImageSize(urlData);
 
         // 显示图片
         image.setAttributeNS(
@@ -214,6 +243,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           "xlink:href",
           urlData
         );
+        image.setAttribute('originWidth', width + '')
+        image.setAttribute('originHeight', height + '');
 
         // 防止内存泄露，释放图片内存
         image.addEventListener("load", () => {
@@ -222,11 +253,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
         // 解决上传同一个文件，浏览器认为没变化，而造成读取失败的问题
         fileRef.current!.value = "";
-
-        (container.parentNode as HTMLElement)!.style.width = clientWidth + "px";
-        (container.parentNode as HTMLElement)!.style.height =
-          clientHeight + "px";
       }
+
       setContextMenu(initContextMenu);
     };
 
@@ -267,7 +295,12 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           height,
         },
       },
-      <ItemBox dataIndex={key} activeIndex={activeBoxIndex} width={width} height={height} />
+      <ItemBox
+        dataIndex={key}
+        activeIndex={activeBoxIndex}
+        width={width}
+        height={height}
+      />
     );
   };
 
@@ -329,7 +362,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
             containerWidth * dirW - (isLeftLayout ? padding / 2 : 0);
           const currentHeight =
             containerHeight * dirH - (isTopLayout ? padding / 2 : 0);
-          
+
           elements.push(
             createrItemBox(currentWidth, currentHeight, occupyW, occupyH, key)
           );
@@ -379,6 +412,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
         margin: "10px auto",
         background: "#fff",
         boxShadow: "0 0 10px #d9d6d6",
+        backgroundColor: color,
       }}
     >
       {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
