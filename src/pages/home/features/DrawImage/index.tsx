@@ -122,10 +122,6 @@ const initContextMenu = {
   y: 0,
 };
 
-// 每行最多能有多少box
-export const maxContainerWidth = 800;
-export const maxContainerHeight = 800;
-
 export type Direction = "top" | "left";
 
 export type LayoutConfig = {
@@ -146,13 +142,28 @@ type DrawImageProps = {
   padding: number;
 
   /**
+   * 变宽
+   */
+  borderSize: number;
+
+  /**
    * 当前选中的色块
    */
   color: string;
+
+  /**
+   * 最大外层容器的宽度
+   */
+  maxContainerWidth: number;
+
+  /**
+   * 最大外层容器的高度
+   */
+  maxContainerHeight: number;
 };
 
 const DrawImage: FC<DrawImageProps> = (props) => {
-  const { padding, color } = props;
+  const { padding, color, maxContainerWidth, maxContainerHeight, borderSize } = props;
 
   const ele = useRef<HTMLDivElement | null>(null);
 
@@ -206,10 +217,12 @@ const DrawImage: FC<DrawImageProps> = (props) => {
 
     /**
      * 通过image标签获取图片源的真实大小
-     * @param urlData 
-     * @returns 
+     * @param urlData
+     * @returns
      */
-    const saveOriginImageSize = (urlData: string): Promise<{ width: number, height: number }> => {
+    const saveOriginImageSize = (
+      urlData: string
+    ): Promise<{ width: number; height: number }> => {
       return new Promise((resolve) => {
         let img: HTMLImageElement | null = new Image();
         // 图像加载完成后的回调函数
@@ -220,8 +233,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           img = null;
           resolve({
             width,
-            height
-          })
+            height,
+          });
         };
         // 将图像的源设置为已加载的图片数据
         img.src = urlData;
@@ -234,7 +247,6 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       const container = pendingUplaodBox.current as HTMLElement;
       const image = container.getElementsByTagName("image")[0];
       if (image) {
-
         const { width, height } = await saveOriginImageSize(urlData);
 
         // 显示图片
@@ -243,8 +255,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
           "xlink:href",
           urlData
         );
-        image.setAttribute('originWidth', width + '')
-        image.setAttribute('originHeight', height + '');
+        image.setAttribute("originWidth", width + "");
+        image.setAttribute("originHeight", height + "");
 
         // 防止内存泄露，释放图片内存
         image.addEventListener("load", () => {
@@ -309,6 +321,9 @@ const DrawImage: FC<DrawImageProps> = (props) => {
    * @param layout 当前配置
    * @param containerWidth 父级容器的宽度
    * @param containerHeight 父级容器的高度
+   * @param occupyWidth 从何位置开始绘制
+   * @param occupyHeight 从何位置开始绘制
+   * @param isMinusBorder 是否需要减去border
    */
   const handlerLayout = (
     layout: LayoutConfig[],
@@ -316,13 +331,14 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     containerHeight: number,
     occupyWidth?: number,
     occupyHeight?: number,
-    parentDirection: string = "left"
+    parentDirection: string = "left",
+    isMinusBorder: boolean = true
   ) => {
     let elements: ReactNode[] = [];
 
     // 已经占据了多少呢？
-    let occupyW = occupyWidth || 0;
-    let occupyH = occupyHeight || 0;
+    let occupyW = occupyWidth || borderSize
+    let occupyH = occupyHeight || borderSize;
 
     // 获取父容器的布局方式
     const isLeftLayout = parentDirection === "left";
@@ -336,9 +352,9 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       if (children && direction) {
         // !isTop 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
         const currnetW =
-          containerWidth * dirW - (isLeftLayout && !isTop ? padding / 2 : 0);
+          containerWidth * dirW - (isLeftLayout && !isTop ? padding / 2 : 0) - (isMinusBorder ? borderSize : 0);
         const currnetH =
-          containerHeight * dirH - (isTopLayout && !isTop ? padding / 2 : 0);
+          containerHeight * dirH - (isTopLayout && !isTop ? padding / 2 : 0) - (isMinusBorder ? borderSize : 0);
 
         elements = elements.concat(
           handlerLayout(
@@ -347,7 +363,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
             currnetH,
             occupyW,
             occupyH,
-            direction
+            direction,
+            false
           )
         );
 
@@ -402,33 +419,37 @@ const DrawImage: FC<DrawImageProps> = (props) => {
   };
 
   return (
-    <div
-      className={styles.drawImageContainer}
-      ref={ele}
-      style={{
-        position: "relative",
-        width: maxContainerWidth,
-        height: maxContainerHeight,
-        margin: "10px auto",
-        background: "#fff",
-        boxShadow: "0 0 10px #d9d6d6",
-        backgroundColor: color,
-      }}
-    >
-      {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
-      <ContextMenu
-        left={contextMenu.x}
-        top={contextMenu.y}
-        open={contextMenu.open}
-      />
-      {/* 上传元素 */}
-      <input
-        ref={fileRef}
-        type="file"
-        id="cellImgPicker"
-        accept="image/jpeg,image/png"
-        style={{ display: "none" }}
-      />
+    <div style={{
+      width: '800px',
+      height: '800px',
+      margin: "10px auto",
+      backgroundColor: color,
+      boxShadow: "0 0 10px #d9d6d6",
+    }}>
+      <div
+        className={styles.drawImageContainer}
+        ref={ele}
+        style={{
+          position: "relative",
+          width: maxContainerWidth,
+          height: maxContainerHeight,
+        }}
+      >
+        {handlerLayout(testLayoutCofig, maxContainerWidth, maxContainerHeight)}
+        <ContextMenu
+          left={contextMenu.x}
+          top={contextMenu.y}
+          open={contextMenu.open}
+        />
+        {/* 上传元素 */}
+        <input
+          ref={fileRef}
+          type="file"
+          id="cellImgPicker"
+          accept="image/jpeg,image/png"
+          style={{ display: "none" }}
+        />
+      </div>
     </div>
   );
 };

@@ -1,40 +1,47 @@
 import { Button } from "antd";
 import type { FC } from "react";
-import { maxContainerHeight, maxContainerWidth } from "../DrawImage";
 
 type DownLoadImageProps = {
   /**
    * 颜色
    */
   color: string;
+
+  /**
+   * 最大外层容器的宽度
+   */
+  maxContainerWidth: number;
+
+  /**
+   * 最大外层容器的高度
+   */
+  maxContainerHeight: number;
 };
 const DownLoadImage: FC<DownLoadImageProps> = (props) => {
-
-  const { color } = props;
+  const { color, maxContainerWidth, maxContainerHeight } = props;
 
   /**
    * 图片转canvas
-   * @param image 
-   * @returns 
+   * @param image
+   * @returns
    */
   const imageToCanvas = (config: any): HTMLCanvasElement => {
-    
     const tempCanvas = document.createElement("canvas");
 
-    const imageHtml = config.img as HTMLImageElement
+    const imageHtml = config.img as HTMLImageElement;
 
     // 源图像的宽高
-    const originImageWidth = Number(imageHtml.getAttribute('originWidth'))
-    const originImageHeight = Number(imageHtml.getAttribute('originHeight'))
+    const originImageWidth = Number(imageHtml.getAttribute("originWidth"));
+    const originImageHeight = Number(imageHtml.getAttribute("originHeight"));
 
     // 页面中的图像宽高
-    const contentImageWidth = config.img.getBoundingClientRect().width
+    const contentImageWidth = config.img.getBoundingClientRect().width;
 
     // 根据页面中图像的大小 与 只需要显示的区域，进行除法，得出一个占据的百分比
-    const area = config.width / contentImageWidth
+    const area = config.width / contentImageWidth;
 
-    tempCanvas.width = config.width
-    tempCanvas.height = config.height
+    tempCanvas.width = config.width;
+    tempCanvas.height = config.height;
 
     const tempCtx = tempCanvas.getContext("2d")!;
 
@@ -50,8 +57,8 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
       config.height
     );
 
-    return tempCanvas
-  }
+    return tempCanvas;
+  };
 
   // 获取所有图片的元素，整合在canvas中进行导出
   const handlerDownLoadImage = () => {
@@ -82,7 +89,7 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
     ctx.fillRect(0, 0, maxContainerWidth, maxContainerHeight);
 
     pendingDrawCanvasImageList.forEach((item) => {
-      if ( (item.img as HTMLOrSVGImageElement).getAttribute('xlink:href') ) {
+      if ((item.img as HTMLOrSVGImageElement).getAttribute("xlink:href")) {
         ctx.drawImage(
           imageToCanvas(item),
           0,

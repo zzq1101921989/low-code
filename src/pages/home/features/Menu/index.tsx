@@ -15,6 +15,8 @@ type MenuProps = {
    */
   paddingPercentage: number
   setPaddingPercentage: Dispatch<React.SetStateAction<number>>
+  borderSize: number
+  setBorderSize: Dispatch<React.SetStateAction<number>>
   color: string
   setColor: Dispatch<React.SetStateAction<string>>
 }
@@ -24,7 +26,7 @@ type MenuProps = {
  */
 const Menu: FC<MenuProps> = (props) => {
 
-  const { paddingPercentage, setPaddingPercentage, setColor, color } = props;
+  const { paddingPercentage, setPaddingPercentage, setColor, color, borderSize, setBorderSize } = props;
 
   const items: TabsProps["items"] = [
     {
@@ -54,7 +56,7 @@ const Menu: FC<MenuProps> = (props) => {
               </div>
               <div>
                 边框
-                <Slider defaultValue={10} />
+                <Slider defaultValue={borderSize} onChange={setBorderSize} />
               </div>
               <div>
                 圆角
