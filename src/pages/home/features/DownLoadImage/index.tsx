@@ -18,7 +18,7 @@ type DownLoadImageProps = {
   maxContainerHeight: number;
 };
 const DownLoadImage: FC<DownLoadImageProps> = (props) => {
-  const { color, maxContainerWidth, maxContainerHeight } = props;
+  const { color } = props;
 
   /**
    * 图片转canvas
@@ -78,16 +78,18 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
 
     // 3、创建canvas画布
     const canvas = document.createElement("canvas");
-    canvas.width = maxContainerWidth;
-    canvas.height = maxContainerHeight;
+    canvas.width = 800;
+    canvas.height = 800;
 
     // 4、获取绘制上下文
     const ctx = canvas.getContext("2d")!;
 
     // 5、绘制底部颜色
     ctx.fillStyle = color;
-    ctx.fillRect(0, 0, maxContainerWidth, maxContainerHeight);
+    ctx.fillRect(0, 0, 800, 800);
 
+    console.log(pendingDrawCanvasImageList, 'pendingDrawCanvasImageList');
+    
     pendingDrawCanvasImageList.forEach((item) => {
       if ((item.img as HTMLOrSVGImageElement).getAttribute("xlink:href")) {
         ctx.drawImage(
