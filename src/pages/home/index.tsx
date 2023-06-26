@@ -19,9 +19,8 @@ const Home: FC = () => {
   // 颜色区域选择
   const [color, setColor] = useState('rgb(237, 239, 241)')
 
-  // 当前计算出来的间距和边框是多少
+  // 当前计算出来的间距是多少
   const padding = Math.round(maxPedding * (paddingPercentage / 100));
-  const border = Math.round(maxBorder * (borderSize / 100));
 
   // 每行最多能有多少box
   const maxContainerWidth = 800 - borderSize;
