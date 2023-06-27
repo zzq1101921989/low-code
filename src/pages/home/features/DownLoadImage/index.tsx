@@ -88,8 +88,6 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, 800, 800);
 
-    console.log(pendingDrawCanvasImageList, 'pendingDrawCanvasImageList');
-    
     pendingDrawCanvasImageList.forEach((item) => {
       if ((item.img as HTMLOrSVGImageElement).getAttribute("xlink:href")) {
         ctx.drawImage(

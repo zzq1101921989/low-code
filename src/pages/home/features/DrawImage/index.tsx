@@ -163,7 +163,8 @@ type DrawImageProps = {
 };
 
 const DrawImage: FC<DrawImageProps> = (props) => {
-  const { padding, color, maxContainerWidth, maxContainerHeight, borderSize } = props;
+  const { padding, color, maxContainerWidth, maxContainerHeight, borderSize } =
+    props;
 
   const ele = useRef<HTMLDivElement | null>(null);
 
@@ -188,22 +189,16 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       e.preventDefault();
     };
 
-    const mousedownFn = (e: MouseEvent) => {
+    const mousedownFn = (e: any) => {
       if (e.target && (e.button === 0 || e.button === 2)) {
         // 获取上传区域的dom
         const type = (e.target as HTMLElement).getAttribute("data-type");
         const index = (e.target as HTMLElement).getAttribute("data-index");
         if (type === "add") {
-          const offsetLeftTotal =
-            ele.current!.offsetLeft +
-            (ele.current!.parentNode as HTMLElement | null)!.offsetLeft;
-          const offsetTopTotal =
-            ele.current!.offsetTop +
-            (ele.current!.parentNode as HTMLElement | null)!.offsetTop;
           setContextMenu({
             open: true,
-            x: e.clientX - offsetLeftTotal,
-            y: e.clientY - offsetTopTotal + 10,
+            x: e['layerX'] + 20,
+            y: e['layerY'] + 20,
           });
           setActiveBoxIndex(Number(index));
           pendingUplaodBox.current = (e.target as HTMLElement).parentNode;
@@ -337,7 +332,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
     let elements: ReactNode[] = [];
 
     // 已经占据了多少呢？
-    let occupyW = occupyWidth || borderSize
+    let occupyW = occupyWidth || borderSize;
     let occupyH = occupyHeight || borderSize;
 
     // 获取父容器的布局方式
@@ -352,9 +347,13 @@ const DrawImage: FC<DrawImageProps> = (props) => {
       if (children && direction) {
         // !isTop 代表这不是最顶层的父级容器，最顶层的父级宽高都是不需要 - 中间横杠的数值的
         const currnetW =
-          containerWidth * dirW - (isLeftLayout && !isTop ? padding / 2 : 0) - (isMinusBorder ? borderSize : 0);
+          containerWidth * dirW -
+          (isLeftLayout && !isTop ? padding / 2 : 0) -
+          (isMinusBorder ? borderSize : 0);
         const currnetH =
-          containerHeight * dirH - (isTopLayout && !isTop ? padding / 2 : 0) - (isMinusBorder ? borderSize : 0);
+          containerHeight * dirH -
+          (isTopLayout && !isTop ? padding / 2 : 0) -
+          (isMinusBorder ? borderSize : 0);
 
         elements = elements.concat(
           handlerLayout(
@@ -419,13 +418,15 @@ const DrawImage: FC<DrawImageProps> = (props) => {
   };
 
   return (
-    <div style={{
-      width: '800px',
-      height: '800px',
-      margin: "10px auto",
-      backgroundColor: color,
-      boxShadow: "0 0 10px #d9d6d6",
-    }}>
+    <div
+      style={{
+        width: "800px",
+        height: "800px",
+        margin: "10px auto",
+        backgroundColor: color,
+        boxShadow: "0 0 10px #d9d6d6",
+      }}
+    >
       <div
         className={styles.drawImageContainer}
         ref={ele}
