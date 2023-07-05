@@ -10,7 +10,7 @@ interface AreaProps {
   /**
    * @name 中间区域内容
    */
-  centre?: string | ReactNode;
+  centre: string[] | ReactNode[];
 }
 const Area: FC<AreaProps> = (props) => {
   const { header, centre } = props;
@@ -22,13 +22,14 @@ const Area: FC<AreaProps> = (props) => {
       >
         {header}
       </div>
-      {centre && (
-        <div
-          className={`${styles["area-container-centre"]} ${styles.padding} ${styles["borderBottom"]}`}
-        >
-          {centre}
-        </div>
-      )}
+      {centre.length &&
+        centre.map((item) => (
+          <div
+            className={`${styles["area-container-centre"]} ${styles.padding} ${styles["borderBottom"]}`}
+          >
+            {item}
+          </div>
+        ))}
     </div>
   );
 };

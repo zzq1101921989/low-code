@@ -1,20 +1,20 @@
-import type { Dispatch, FC } from "react";
+import type { FC } from "react";
+import { useRecoilState } from "recoil";
+import { GlobalState } from "../../..";
 
 type ColorBlockProps = {
   /**
    * 颜色块列表
    */
   colorList: string[];
-
-  /**
-   * 当前颜色块
-   */
-  currentColor: string;
-
-  setColor: Dispatch<React.SetStateAction<string>>;
 };
 const ColorBlock: FC<ColorBlockProps> = (props) => {
-  const { colorList, currentColor, setColor } = props;
+  
+  const { colorList } = props;
+
+  const [globalState, setGlobalState] = useRecoilState(GlobalState);
+
+  const { color } = globalState;
 
   return (
     <div style={{ display: "flex", marginBottom: 12 }}>
@@ -22,7 +22,12 @@ const ColorBlock: FC<ColorBlockProps> = (props) => {
         <div
           key={item}
           onClick={() => {
-            setColor(item);
+            setGlobalState((oldState) => {
+              return {
+                ...oldState,
+                color: item,
+              };
+            });
           }}
           style={{
             width: 150,
@@ -31,7 +36,7 @@ const ColorBlock: FC<ColorBlockProps> = (props) => {
             textAlign: "center",
           }}
         >
-          {currentColor === item && (
+          {color === item && (
             <span
               style={{
                 fontSize: 18,

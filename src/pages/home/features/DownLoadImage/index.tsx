@@ -1,24 +1,15 @@
 import { Button } from "antd";
 import type { FC } from "react";
+import { useRecoilValue } from "recoil";
+import { GlobalState } from "../..";
 
-type DownLoadImageProps = {
-  /**
-   * 颜色
-   */
-  color: string;
+const DownLoadImage: FC<any> = (props) => {
 
-  /**
-   * 最大外层容器的宽度
-   */
-  maxContainerWidth: number;
+  const { } = props;
 
-  /**
-   * 最大外层容器的高度
-   */
-  maxContainerHeight: number;
-};
-const DownLoadImage: FC<DownLoadImageProps> = (props) => {
-  const { color } = props;
+  const globalState = useRecoilValue(GlobalState);
+  
+  const { color } = globalState;
 
   /**
    * 图片转canvas
@@ -26,6 +17,7 @@ const DownLoadImage: FC<DownLoadImageProps> = (props) => {
    * @returns
    */
   const imageToCanvas = (config: any): HTMLCanvasElement => {
+
     const tempCanvas = document.createElement("canvas");
 
     const imageHtml = config.img as HTMLImageElement;

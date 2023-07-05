@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { useRecoilValue } from "recoil";
+import { GlobalState } from "../..";
 import { ItemBox } from "../../components";
 import ContextMenu from "../Contextmenu";
 import SeparateLine from "../SeparateLine";
@@ -15,7 +17,7 @@ import styles from "./index.module.less";
  * direction 代表排列方向
  * width 取小数，代表的是百分比
  */
-const testLayoutCofig: LayoutConfig[] = [
+const testLayoutCofig: LowCodeType.LayoutConfig[] = [
   {
     direction: "left",
     isTop: true,
@@ -116,55 +118,28 @@ const testLayoutCofig: LayoutConfig[] = [
   },
 ];
 
+// 最大的间距是多少
+const maxPedding = 110;
+
 const initContextMenu = {
   open: false,
   x: 0,
   y: 0,
 };
 
-export type Direction = "top" | "left";
+const DrawImage: FC<any> = (props) => {
+  
+  const {} = props;
 
-export type LayoutConfig = {
-  isTop?: boolean;
-  direction?: Direction;
-  // 这种代表的是中间拖拉的组件，用于拖拉宽度或者高度的
-  type?: "flag";
-  dirW: number;
-  dirH: number;
-  key?: any;
-  children?: LayoutConfig[];
-};
+  const globalState = useRecoilValue(GlobalState);
+  const { color, paddingPercentage, borderSize } = globalState;
 
-type DrawImageProps = {
-  /**
-   * 间距
-   */
-  padding: number;
+  // 当前计算出来的间距是多少
+  const padding = Math.round(maxPedding * (paddingPercentage / 100));
 
-  /**
-   * 变宽
-   */
-  borderSize: number;
-
-  /**
-   * 当前选中的色块
-   */
-  color: string;
-
-  /**
-   * 最大外层容器的宽度
-   */
-  maxContainerWidth: number;
-
-  /**
-   * 最大外层容器的高度
-   */
-  maxContainerHeight: number;
-};
-
-const DrawImage: FC<DrawImageProps> = (props) => {
-  const { padding, color, maxContainerWidth, maxContainerHeight, borderSize } =
-    props;
+  // 每行最多能有多少box
+  const maxContainerWidth = 800 - borderSize;
+  const maxContainerHeight = 800 - borderSize;
 
   const ele = useRef<HTMLDivElement | null>(null);
 
@@ -197,8 +172,8 @@ const DrawImage: FC<DrawImageProps> = (props) => {
         if (type === "add") {
           setContextMenu({
             open: true,
-            x: e['layerX'] + 20,
-            y: e['layerY'] + 20,
+            x: e["layerX"] + 20,
+            y: e["layerY"] + 20,
           });
           setActiveBoxIndex(Number(index));
           pendingUplaodBox.current = (e.target as HTMLElement).parentNode;
@@ -321,7 +296,7 @@ const DrawImage: FC<DrawImageProps> = (props) => {
    * @param isMinusBorder 是否需要减去border
    */
   const handlerLayout = (
-    layout: LayoutConfig[],
+    layout: LowCodeType.LayoutConfig[],
     containerWidth: number,
     containerHeight: number,
     occupyWidth?: number,
