@@ -127,10 +127,8 @@ const initContextMenu = {
   y: 0,
 };
 
-const DrawImage: FC<any> = (props) => {
+const DrawImage: FC<any> = () => {
   
-  const {} = props;
-
   const globalState = useRecoilValue(GlobalState);
   const { color, paddingPercentage, borderSize } = globalState;
 
@@ -240,6 +238,14 @@ const DrawImage: FC<any> = (props) => {
       setContextMenu(initContextMenu);
     };
 
+    const outsideCloseMenuContext = (e: MouseEvent) => {
+      if (e.target?.id === "drawImage_container") {
+        setContextMenu({
+          ...initContextMenu
+        })
+      }
+    }
+
     uploadBtn?.addEventListener("click", click);
 
     fileRef.current?.addEventListener("change", readerFile);
@@ -249,11 +255,14 @@ const DrawImage: FC<any> = (props) => {
       ele.current.addEventListener("mousedown", mousedownFn);
     }
 
+    document.body.addEventListener('click', outsideCloseMenuContext)
+
     return () => {
       uploadBtn?.removeEventListener("click", click);
       fileRef.current?.removeEventListener("change", readerFile);
       ele.current?.removeEventListener("contextmenu", contextmenuFn);
       ele.current?.removeEventListener("mousedown", mousedownFn);
+      document.body.removeEventListener('click', outsideCloseMenuContext)
     };
   }, []);
 

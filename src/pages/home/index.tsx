@@ -20,7 +20,7 @@ const Home: FC = () => {
         <Col xl={5}>
           <Menu />
         </Col>
-        <Col xl={19}>
+        <Col xl={19} id="drawImage_container">
           <DrawImage />
         </Col>
         <DownLoadImage />
