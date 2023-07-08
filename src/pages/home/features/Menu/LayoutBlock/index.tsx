@@ -21,6 +21,7 @@ export const LayoutBlock: FC<LayoutBlockProps> = (props) => {
       header="布局"
       centre={[
         <div
+          key='layout'
           style={{
             width: "100%",
             display: "flex",
@@ -62,9 +63,9 @@ export const LayoutBlock: FC<LayoutBlockProps> = (props) => {
             <Slider defaultValue={10} />
           </div>
         </div>,
-        <div className="layout-block-container">
-          {config.map((item) => {
-            return <LayoutBlockItem config={item} />;
+        <div key='layoutContainer' className="layout-block-container">
+          {config.map((item, idx) => {
+            return <LayoutBlockItem key={idx} config={item} />;
           })}
         </div>,
       ]}

@@ -23,8 +23,9 @@ const Area: FC<AreaProps> = (props) => {
         {header}
       </div>
       {centre.length &&
-        centre.map((item) => (
+        centre.map((item, idx) => (
           <div
+            key={idx}
             className={`${styles["area-container-centre"]} ${styles.padding} ${styles["borderBottom"]}`}
           >
             {item}

@@ -172,8 +172,8 @@ const DrawImage: FC<any> = (props) => {
         if (type === "add") {
           setContextMenu({
             open: true,
-            x: e["layerX"] + 20,
-            y: e["layerY"] + 20,
+            x: e["layerX"] + e.target.parentNode?.parentNode?.offsetLeft,
+            y: e["layerY"] + e.target.parentNode?.parentNode?.offsetTop + 2,
           });
           setActiveBoxIndex(Number(index));
           pendingUplaodBox.current = (e.target as HTMLElement).parentNode;
