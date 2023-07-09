@@ -1,0 +1,288 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DrawImage > it should render DrawImage 1`] = `
+<div>
+  <div
+    style="width: 800px; height: 800px; margin: 10px auto; background-color: rgb(237, 239, 241); box-shadow: 0 0 10px #d9d6d6;"
+  >
+    <div
+      class="_drawImageContainer_6fd199"
+      data-testid="drawImage_container"
+      style="position: relative; width: 785px; height: 785px;"
+    >
+      <div
+        class="edit-container"
+        style="position: absolute; left: 15px; top: 15px; width: 530.5px; height: 770px;"
+      >
+        <div
+          class="_itemBox_c03887"
+        >
+          <svg
+            view-box="0 0 530.5 770"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              style="transform: matrix(1, 0, 0, 1, 0, 0);"
+            >
+              <image
+                height="770"
+              />
+            </g>
+          </svg>
+          <span
+            class="_close_c03887"
+          >
+            <svg
+              id="图层_1"
+              version="1.1"
+              viewBox="0 0 16 16"
+              x="0px"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              y="0px"
+            >
+              <path
+                d="M11.8,1.6l-0.7,0.7L7.8,5.6L4.6,2.3L3.9,1.6L3.1,2.3L2,3.4L1.3,4.1L2,4.8l3.3,3.3L2,11.4l-0.7,0.7L2,12.8 L3.1,14l0.7,0.7L4.6,14l3.3-3.3l3.3,3.3l0.7,0.7l0.7-0.7l1.1-1.1l0.7-0.7l-0.7-0.7l-3.3-3.3l3.3-3.3l0.7-0.7l-0.7-0.7l-1.1-1.1 L11.8,1.6L11.8,1.6z"
+                style="opacity: 0.9; fill: rgb(255, 255, 255);"
+              />
+               
+              <g>
+                <polygon
+                  points="13,4.1 11.8,3 7.8,7 3.9,3 2.7,4.1 6.7,8.1 2.7,12.1 3.9,13.3 7.8,9.3 11.8,13.3 13,12.1 9,8.1 	"
+                />
+              </g>
+            </svg>
+          </span>
+          <span
+            class="_add_c03887"
+            data-index="1"
+            data-type="add"
+            style="display: flex;"
+          >
+            +
+          </span>
+          <div
+            class="item-border"
+            style="position: absolute; top: 0px; left: 0px; width: 530.5px; height: 770px; border: 2px dashed #1e80ff80; box-sizing: border-box;"
+          />
+        </div>
+      </div>
+      <div
+        class="_lineContainer_ce9da2"
+        style="left: 545.5px; top: 15px; width: 17px; height: 770px; flex-direction: row;"
+      >
+        <div
+          class="_line_ce9da2"
+          style="cursor: e-resize; width: 4px; height: 770px;"
+        />
+      </div>
+      <div
+        class="edit-container"
+        style="position: absolute; left: 562.5px; top: 15px; width: 222.5px; height: 376.5px;"
+      >
+        <div
+          class="_itemBox_c03887"
+        >
+          <svg
+            view-box="0 0 222.5 376.5"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              style="transform: matrix(1, 0, 0, 1, 0, 0);"
+            >
+              <image
+                height="376.5"
+              />
+            </g>
+          </svg>
+          <span
+            class="_close_c03887"
+          >
+            <svg
+              id="图层_1"
+              version="1.1"
+              viewBox="0 0 16 16"
+              x="0px"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              y="0px"
+            >
+              <path
+                d="M11.8,1.6l-0.7,0.7L7.8,5.6L4.6,2.3L3.9,1.6L3.1,2.3L2,3.4L1.3,4.1L2,4.8l3.3,3.3L2,11.4l-0.7,0.7L2,12.8 L3.1,14l0.7,0.7L4.6,14l3.3-3.3l3.3,3.3l0.7,0.7l0.7-0.7l1.1-1.1l0.7-0.7l-0.7-0.7l-3.3-3.3l3.3-3.3l0.7-0.7l-0.7-0.7l-1.1-1.1 L11.8,1.6L11.8,1.6z"
+                style="opacity: 0.9; fill: rgb(255, 255, 255);"
+              />
+               
+              <g>
+                <polygon
+                  points="13,4.1 11.8,3 7.8,7 3.9,3 2.7,4.1 6.7,8.1 2.7,12.1 3.9,13.3 7.8,9.3 11.8,13.3 13,12.1 9,8.1 	"
+                />
+              </g>
+            </svg>
+          </span>
+          <span
+            class="_add_c03887"
+            data-index="1444"
+            data-type="add"
+            style="display: flex;"
+          >
+            +
+          </span>
+          <div
+            class="item-border"
+            style="position: absolute; top: 0px; left: 0px; width: 222.5px; height: 376.5px; border: 2px dashed #1e80ff80; box-sizing: border-box;"
+          />
+        </div>
+      </div>
+      <div
+        class="_lineContainer_ce9da2"
+        style="left: 562.5px; top: 391.5px; width: 222.5px; height: 17px; flex-direction: column;"
+      >
+        <div
+          class="_line_ce9da2"
+          style="cursor: n-resize; width: 222.5px; height: 4px;"
+        />
+      </div>
+      <div
+        class="edit-container"
+        style="position: absolute; left: 562.5px; top: 408.5px; width: 222.5px; height: 376.5px;"
+      >
+        <div
+          class="_itemBox_c03887"
+        >
+          <svg
+            view-box="0 0 222.5 376.5"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+          >
+            <g
+              style="transform: matrix(1, 0, 0, 1, 0, 0);"
+            >
+              <image
+                height="376.5"
+              />
+            </g>
+          </svg>
+          <span
+            class="_close_c03887"
+          >
+            <svg
+              id="图层_1"
+              version="1.1"
+              viewBox="0 0 16 16"
+              x="0px"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              y="0px"
+            >
+              <path
+                d="M11.8,1.6l-0.7,0.7L7.8,5.6L4.6,2.3L3.9,1.6L3.1,2.3L2,3.4L1.3,4.1L2,4.8l3.3,3.3L2,11.4l-0.7,0.7L2,12.8 L3.1,14l0.7,0.7L4.6,14l3.3-3.3l3.3,3.3l0.7,0.7l0.7-0.7l1.1-1.1l0.7-0.7l-0.7-0.7l-3.3-3.3l3.3-3.3l0.7-0.7l-0.7-0.7l-1.1-1.1 L11.8,1.6L11.8,1.6z"
+                style="opacity: 0.9; fill: rgb(255, 255, 255);"
+              />
+               
+              <g>
+                <polygon
+                  points="13,4.1 11.8,3 7.8,7 3.9,3 2.7,4.1 6.7,8.1 2.7,12.1 3.9,13.3 7.8,9.3 11.8,13.3 13,12.1 9,8.1 	"
+                />
+              </g>
+            </svg>
+          </span>
+          <span
+            class="_add_c03887"
+            data-index="3434"
+            data-type="add"
+            style="display: flex;"
+          >
+            +
+          </span>
+          <div
+            class="item-border"
+            style="position: absolute; top: 0px; left: 0px; width: 222.5px; height: 376.5px; border: 2px dashed #1e80ff80; box-sizing: border-box;"
+          />
+        </div>
+      </div>
+      <div
+        class="_contextMenu_4ce020"
+        style="left: 0px; top: 0px; display: none;"
+      >
+        <div
+          class="_contextMenuItem_4ce020"
+          id="uploadBtn"
+        >
+          <div
+            class="ant-space css-dev-only-do-not-override-14wwjjs ant-space-horizontal ant-space-align-center"
+          >
+            <div
+              class="ant-space-item"
+              style="margin-right: 8px;"
+            >
+              <svg
+                enable-background="new 0 0 16 16"
+                id="图层_1"
+                version="1.1"
+                viewBox="0 0 16 16"
+                x="0px"
+                xml:space="preserve"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                y="0px"
+              >
+                <path
+                  d="M3.5,7C2.672,7,2,6.328,2,5.5S2.672,4,3.5,4S5,4.672,5,5.5S4.328,7,3.5,7z M1,2h13c0.552,0,1,0.448,1,1v10  c0,0.552-0.448,1-1,1H1c-0.552,0-1-0.448-1-1V3C0,2.448,0.448,2,1,2z M14,11.294V3H1v10h0.297l5.687-5l4.433,5h0.661l-1.916-2.267  l1.843-1.77L14,11.294z"
+                />
+              </svg>
+            </div>
+            <div
+              class="ant-space-item"
+            >
+              添加图片
+            </div>
+          </div>
+        </div>
+        <div
+          class="_contextMenuItem_4ce020"
+        >
+          <div
+            class="ant-space css-dev-only-do-not-override-14wwjjs ant-space-horizontal ant-space-align-center"
+          >
+            <div
+              class="ant-space-item"
+              style="margin-right: 8px;"
+            >
+              <svg
+                enable-background="new 0 0 16 16"
+                id="图层_1"
+                version="1.1"
+                viewBox="0 0 16 16"
+                x="0px"
+                xml:space="preserve"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                y="0px"
+              >
+                <path
+                  clip-rule="evenodd"
+                  d="M14.984,13.169C15.169,15.754,13.748,16,12.512,16  c-1.236,0-2.781-0.308-2.472-2.831C10.225,11.631,12.512,8,12.512,8S14.86,11.815,14.984,13.169z M13,7.051  c0,0.203-0.103,0.457-0.258,0.659l-5.829,5.986c-0.413,0.406-1.032,0.406-1.444,0L0.31,8.42c-0.413-0.457-0.413-1.116,0-1.522  l3.663-3.754L1.806,0.913c-0.206-0.203-0.206-0.507,0-0.761c0.206-0.203,0.516-0.203,0.722,0l2.167,2.283L6.19,0.913  c0.413-0.406,1.032-0.406,1.444,0l5.056,5.275C12.948,6.442,13,6.746,13,7.051z M1.97,6.611h9.848L6.869,1.556l-1.4,1.458  l1.75,1.799c0.2,0.194,0.2,0.535,0,0.729c-0.2,0.194-0.5,0.194-0.7,0l-1.75-1.799L1.97,6.611z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div
+              class="ant-space-item"
+            >
+              填充背景
+            </div>
+          </div>
+        </div>
+      </div>
+      <input
+        accept="image/jpeg,image/png"
+        id="cellImgPicker"
+        style="display: none;"
+        type="file"
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -23,23 +23,24 @@ const testLayoutCofig: LowCodeType.LayoutConfig[] = [
     isTop: true,
     dirW: 1,
     dirH: 1,
+    key: 0,
     children: [
       {
         dirW: 0.7,
         dirH: 1,
-        key: Math.random() * 100000,
+        key: 1,
         // direction: "top",
         // children: [
         //   {
         //     dirW: 1,
         //     dirH: 0.3,
-        //     key: Math.random() * 100000,
+        //     key: 2,
         //   },
         //   {
         //     type: "flag",
         //     dirW: 1,
         //     dirH: 1,
-        //     key: Math.random() * 100000,
+        //     key: 3,
         //   },
         //   {
         //     dirW: 1,
@@ -49,13 +50,13 @@ const testLayoutCofig: LowCodeType.LayoutConfig[] = [
         //       {
         //         dirW: 0.4,
         //         dirH: 1,
-        //         key: Math.random() * 100000,
+        //         key: 4,
         //       },
         //       {
         //         type: "flag",
         //         dirW: 0,
         //         dirH: 0,
-        //         key: Math.random() * 100000,
+        //         key: 5,
         //       },
         //       {
         //         dirW: 0.6,
@@ -65,18 +66,18 @@ const testLayoutCofig: LowCodeType.LayoutConfig[] = [
         //           {
         //             dirW: 1,
         //             dirH: 0.5,
-        //             key: Math.random() * 100000,
+        //             key: 6,
         //           },
         //           {
         //             type: "flag",
         //             dirW: 0,
         //             dirH: 0,
-        //             key: Math.random() * 100000,
+        //             key: 7,
         //           },
         //           {
         //             dirW: 1,
         //             dirH: 0.5,
-        //             key: Math.random() * 100000,
+        //             key: 8,
         //           },
         //         ],
         //       },
@@ -88,29 +89,29 @@ const testLayoutCofig: LowCodeType.LayoutConfig[] = [
         type: "flag",
         dirW: 0,
         dirH: 0,
-        key: Math.random() * 100000,
+        key: 34,
       },
       {
         dirW: 0.3,
         dirH: 1,
-        key: Math.random() * 100000,
+        key: 23,
         direction: "top",
         children: [
           {
             dirW: 1,
             dirH: 0.5,
-            key: Math.random() * 100000,
+            key: 1444,
           },
           {
             type: "flag",
             dirW: 1,
             dirH: 1,
-            key: Math.random() * 100000,
+            key: 56,
           },
           {
             dirW: 1,
             dirH: 0.5,
-            key: Math.random() * 100000,
+            key: 3434,
           },
         ],
       },
@@ -250,12 +251,12 @@ const DrawImage: FC<any> = () => {
 
     fileRef.current?.addEventListener("change", readerFile);
 
+    document.body.addEventListener('click', outsideCloseMenuContext)
+
     if (ele.current) {
       ele.current.addEventListener("contextmenu", contextmenuFn);
       ele.current.addEventListener("mousedown", mousedownFn);
     }
-
-    document.body.addEventListener('click', outsideCloseMenuContext)
 
     return () => {
       uploadBtn?.removeEventListener("click", click);
@@ -412,6 +413,7 @@ const DrawImage: FC<any> = () => {
       }}
     >
       <div
+        data-testid='drawImage_container'
         className={styles.drawImageContainer}
         ref={ele}
         style={{
