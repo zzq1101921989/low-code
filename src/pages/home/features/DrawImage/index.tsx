@@ -111,7 +111,7 @@ const testLayoutCofig: LowCodeType.LayoutConfig[] = [
           {
             dirW: 1,
             dirH: 0.5,
-            key: 3434,
+            key: 343,
           },
         ],
       },
@@ -278,6 +278,7 @@ const DrawImage: FC<any> = () => {
       "div",
       {
         className: "edit-container",
+        'data-testid': 'edit-container',
         key,
         style: {
           position: "absolute",

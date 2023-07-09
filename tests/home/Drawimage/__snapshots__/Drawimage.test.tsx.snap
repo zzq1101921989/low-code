@@ -12,6 +12,7 @@ exports[`DrawImage > it should render DrawImage 1`] = `
     >
       <div
         class="edit-container"
+        data-testid="edit-container"
         style="position: absolute; left: 15px; top: 15px; width: 530.5px; height: 770px;"
       >
         <div
@@ -79,6 +80,7 @@ exports[`DrawImage > it should render DrawImage 1`] = `
       </div>
       <div
         class="edit-container"
+        data-testid="edit-container"
         style="position: absolute; left: 562.5px; top: 15px; width: 222.5px; height: 376.5px;"
       >
         <div
@@ -146,6 +148,7 @@ exports[`DrawImage > it should render DrawImage 1`] = `
       </div>
       <div
         class="edit-container"
+        data-testid="edit-container"
         style="position: absolute; left: 562.5px; top: 408.5px; width: 222.5px; height: 376.5px;"
       >
         <div
@@ -190,7 +193,7 @@ exports[`DrawImage > it should render DrawImage 1`] = `
           </span>
           <span
             class="_add_c03887"
-            data-index="3434"
+            data-index="343"
             data-type="add"
             style="display: flex;"
           >
