@@ -13,6 +13,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 				dirW: 1,
 				dirH: 1,
 				key: 11,
+                flagNum: 1,
 				children: [
 					{
 						dirW: 1,
@@ -30,9 +31,10 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 						direction: "left",
 						dirW: 1,
 						dirH: 0.5,
+                        flagNum: 2,
 						children: [
 							{
-								dirW: 0.33,
+								dirW: 0.3333,
 								dirH: 1,
 								key: 3,
 							},
@@ -43,7 +45,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 								key: 4,
 							},
 							{
-								dirW: 0.33,
+								dirW: 0.3333,
 								dirH: 1,
 								key: 5,
 							},
@@ -54,7 +56,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 								key: 6,
 							},
 							{
-								dirW: 0.33,
+								dirW: 0.3333,
 								dirH: 1,
 								key: 7,
 							},
@@ -73,12 +75,14 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 				dirW: 1,
 				dirH: 1,
 				key: 1,
+                flagNum: 1,
 				children: [
 					{
 						direction: "top",
 						dirW: 0.5,
 						dirH: 1,
 						key: 2,
+                        flagNum: 1,
 						children: [
 							{
 								dirW: 1,
@@ -109,10 +113,11 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 						dirW: 0.5,
 						dirH: 1,
 						key: 4,
+                        flagNum: 2,
 						children: [
 							{
 								dirW: 1,
-								dirH: 0.33,
+								dirH: 0.3333,
 								key: "4.1",
 							},
 							{
@@ -123,7 +128,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 							},
 							{
 								dirW: 1,
-								dirH: 0.33,
+								dirH: 0.3333,
 								key: "4.3",
 							},
 							{
@@ -134,7 +139,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 							},
 							{
 								dirW: 1,
-								dirH: 0.33,
+								dirH: 0.3333,
 								key: "4.5",
 							},
 						],
@@ -152,11 +157,13 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 				isTop: true,
 				direction: "left",
 				key: "1",
+                flagNum: 1,
 				children: [
 					{
 						dirW: 0.5,
 						dirH: 1,
 						direction: "top",
+                        flagNum: 1,
 						children: [
 							{
 								dirW: 1,
@@ -188,6 +195,7 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 						dirH: 1,
 						direction: "top",
 						key: "3",
+                        flagNum: 1,
 						children: [
 							{
 								dirW: 1,
@@ -202,38 +210,48 @@ const LayoutConfig: LowCodeType.LayoutItemConfigType[] = [
 							},
 							{
 								dirW: 1,
-								dirH: 0.25,
-								direction: "left",
+								dirH: 0.5,
+								direction: "top",
 								key: "37",
+                                flagNum: 1,
 								children: [
 									{
-										dirW: 0.5,
-										dirH: 1,
-										key: "3.5",
-									},
-									{
-										type: "flag",
-										dirW: 1,
-										dirH: 1,
-										key: "3.6",
-									},
-									{
-										dirW: 0.5,
-										dirH: 1,
-										key: "3.7",
-									},
+                                        dirW: 1,
+                                        dirH: 0.5,
+                                        direction: "left",
+                                        key: "3.3",
+                                        flagNum: 1,
+                                        children: [
+                                            {
+                                                dirW: 0.5,
+                                                dirH: 1,
+                                                key: "3.3.3",
+                                            },
+                                            {
+                                                type: "flag",
+                                                dirW: 1,
+                                                dirH: 1,
+                                                key: "3.2.4",
+                                            },
+                                            {
+                                                dirW: 0.5,
+                                                dirH: 1,
+                                                key: "3.3.5",
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        type: "flag",
+                                        dirW: 1,
+                                        dirH: 1,
+                                        key: "3.4",
+                                    },
+                                    {
+                                        dirW: 1,
+                                        dirH: 0.5,
+                                        key: "3.5",
+                                    }
 								],
-							},
-							{
-								type: "flag",
-								dirW: 1,
-								dirH: 1,
-								key: "3.3",
-							},
-							{
-								dirW: 1,
-								dirH: 0.25,
-								key: "3.4",
 							},
 						],
 					},
