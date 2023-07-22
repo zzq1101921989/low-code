@@ -13,7 +13,7 @@ export const LayoutBlock: FC<LayoutBlockProps> = (props) => {
 
 	const [globalState, setGlobalState] = useRecoilState(GlobalState);
 
-	const { borderSize, paddingPercentage } = globalState;
+	const { borderSize, paddingPercentage, borderRadius } = globalState;
 
 	return (
 		<Area
@@ -59,7 +59,17 @@ export const LayoutBlock: FC<LayoutBlockProps> = (props) => {
 					</div>
 					<div>
 						圆角
-						<Slider defaultValue={10} />
+						<Slider 
+                            defaultValue={borderRadius}
+                            onChange={(v) => {
+								setGlobalState((oldState) => {
+									return {
+										...oldState,
+										borderRadius: v,
+									};
+								});
+							}}
+                         />
 					</div>
 				</div>,
 				<div key="layoutContainer" className="layout-block-container">

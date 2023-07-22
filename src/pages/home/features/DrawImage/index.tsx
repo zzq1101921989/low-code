@@ -264,20 +264,13 @@ const DrawImage: FC<any> = () => {
 					? containerHeight - borderSize * 2
 					: containerHeight;
 
-                console.log(isLeftLayout, 'isLeftLayout----------');
-                console.log(isTopLayout, 'isTopLayout------------');
-
 				const currnetW =
 					contaW * dirW -
 					( (isLeftLayout && flagNum) ? flagNum * padding : 0);
 				const currnetH =
 					contaH * dirH -
 					( (isTopLayout && flagNum) ? flagNum * padding : 0);
-
-                console.log(currnetW, 'currnetW--------------------');
-                console.log(currnetH, 'currnetH--------------------');
                     
-
 				elements = elements.concat(
 					handlerLayout(
 						children,
@@ -295,9 +288,6 @@ const DrawImage: FC<any> = () => {
 			// 没有子元素
 			else {
 				const { dirH, dirW, type, key } = lay;
-
-				console.log(occupyW, "occupyW");
-				console.log(occupyH, "occupyH");
 
 				if (type !== "flag") {
 					const currentWidth = containerWidth * dirW;
@@ -343,7 +333,6 @@ const DrawImage: FC<any> = () => {
 					}
 				}
 			}
-			console.log("--------------------------------------");
 		});
 
 		return elements;

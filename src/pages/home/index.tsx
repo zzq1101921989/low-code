@@ -16,8 +16,18 @@ export const GlobalState = atom({
 		 * 边框宽度
 		 */
 		borderSize: 15,
+        /**
+         * 默认色卡
+         */
 		color: "rgb(237, 239, 241)",
+        /**
+         * 默认布局配置
+         */
 		layoutConfig: LayoutConfig[0],
+        /**
+         * 圆角
+         */
+        borderRadius: 0
 	},
 });
 
