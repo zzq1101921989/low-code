@@ -1,4 +1,4 @@
-import { FC, memo, useRef, useState } from "react";
+import { FC, memo, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { GlobalState } from "../..";
 import styles from "./index.module.less";
@@ -26,20 +26,46 @@ interface ItemBoxProps {
 }
 
 const ItemBox: FC<ItemBoxProps> = (props) => {
+    
 	const { activeIndex, dataIndex, width, height } = props;
 
-	const [openAddMask, setOpenAddMask] = useState(true);
-
-	const image = useRef<SVGImageElement | null>(null);
+    const image = useRef<SVGImageElement | null>(null);
 
 	const { borderRadius } = useRecoilValue(GlobalState);
 
-	image.current?.addEventListener("load", () => {
-		setOpenAddMask(false);
-	});
+	const [{ maskFlag, width: imageWidth, height: imageHeight }, setItemBoxConfig] = useState({
+        maskFlag: true,
+        width: 0,
+        height: 0,
+    });
+
+
+	// 计算高度缩放比例
+    const scaleWidth = width / imageWidth
+    const scaleHeight = height / imageHeight
+    let calcImageWidth = 0
+    let calcHeight = 0
+    if (width > height) {
+        calcImageWidth = imageWidth * scaleWidth
+        calcHeight = imageHeight * scaleWidth
+        if (calcHeight < height) {
+            const scale = height / calcHeight
+            calcImageWidth = calcImageWidth * scale
+            calcHeight = calcHeight * scale
+        }
+    }
+    else {
+        calcImageWidth = imageWidth * scaleHeight
+        calcHeight = imageHeight * scaleHeight
+        if (calcImageWidth < width) {
+            const scale = width / calcImageWidth
+            calcImageWidth = calcImageWidth * scale
+            calcHeight = calcHeight * scale
+        }
+    }
 
 	const handlerBorder = () => {
-		if (openAddMask) {
+		if (maskFlag) {
 			return {
 				border: `2px ${
 					activeIndex === dataIndex
@@ -47,7 +73,7 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 						: "dashed #1e80ff80"
 				}`,
 			};
-		} else if (!openAddMask && activeIndex === dataIndex) {
+		} else if (!maskFlag && activeIndex === dataIndex) {
 			return {
 				border: "2px solid #2354f4",
 			};
@@ -56,15 +82,19 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 		}
 	};
 
-	// 图片的高度
-	const imageWidth = image.current?.getBoundingClientRect().width;
-	const imageHeight = image.current?.getBoundingClientRect().height;
-
-	// 计算高度缩放比例
-	const scaleRatio = imageHeight ? height / imageHeight : 0;
-
-	// 宽度固定的同时，计算等比宽度，防图片变形
-	const scaleRatioImageWidth = imageWidth ? imageWidth * scaleRatio : 0;
+    useEffect(() => {
+        const load = () => {
+            setItemBoxConfig({
+                maskFlag: false,
+                width: Number(image.current?.getAttribute('originWidth')),
+                height: Number(image.current?.getAttribute('originHeight'))
+            })
+        }
+        image.current?.addEventListener("load", load);
+        return () => {
+            image.current?.removeEventListener('load', load)
+        }
+    }, [])
 
 	return (
 		<div 
@@ -85,10 +115,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 				>
 					<image
 						ref={image}
-						{...(scaleRatioImageWidth && {
-							width: scaleRatioImageWidth,
-						})}
-						height={height}
+                        width={calcImageWidth}
+						height={calcHeight}
 					/>
 				</g>
 			</svg>
@@ -120,7 +148,7 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			{/* 加号 */}
 			<span
 				style={{
-					display: openAddMask ? "flex" : "none",
+					display: maskFlag ? "flex" : "none",
 				}}
 				className={styles.add}
 				data-type="add"

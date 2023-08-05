@@ -96,7 +96,7 @@ const DrawImage: FC<any> = () => {
 		 * @param urlData
 		 * @returns
 		 */
-		const saveOriginImageSize = (
+		const getOriginImageSize = (
 			urlData: string
 		): Promise<{ width: number; height: number }> => {
 			return new Promise((resolve) => {
@@ -123,7 +123,7 @@ const DrawImage: FC<any> = () => {
 			const container = pendingUplaodBox.current as HTMLElement;
 			const image = container.getElementsByTagName("image")[0];
 			if (image) {
-				const { width, height } = await saveOriginImageSize(urlData);
+				const { width, height } = await getOriginImageSize(urlData);
 
 				// 显示图片
 				image.setAttributeNS(
@@ -230,9 +230,6 @@ const DrawImage: FC<any> = () => {
 
 			// 子元素 布局的方向
 			const { dirW, dirH, children, direction, isTop, flagNum } = lay;
-            
-            console.log(lay);
-            
 
 			// 获取父容器的布局方式
 			let isLeftLayout = false;
