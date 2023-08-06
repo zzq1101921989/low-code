@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import html2canvas from "html2canvas";
 import type { FC } from "react";
 import { useRecoilValue } from "recoil";
 import { GlobalState } from "../..";
@@ -148,6 +149,28 @@ const DownLoadImage: FC<any> = (props) => {
 		document.body.removeChild(dlLink);
 	};
 
+    const getShareImgBase64 = () => {
+
+        const dom = document.querySelector('#drawImage_container')?.firstChild as any
+        
+        if (dom) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                  html2canvas(dom, {
+                    useCORS: true, // 【重要】开启跨域配置
+                    scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
+                    allowTaint: true, // 允许跨域图片
+                  }).then((canvas) => {
+                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                    resolve(imgData);
+                  });
+                }, 300); // 这里加上 300ms 的延迟是为了让 DOM 元素完全渲染完成后再进行图片的生成
+              });
+        }
+
+        return Promise.resolve();
+    }
+
 	return (
 		<div
 			style={{
@@ -164,8 +187,9 @@ const DownLoadImage: FC<any> = (props) => {
 			>
 				下载
 			</Button>
+            <Button onClick={getShareImgBase64}>html2Canvas</Button>
 		</div>
 	);
-};
+;
 
 export default DownLoadImage;
