@@ -1,5 +1,4 @@
 import { Button } from "antd";
-import html2canvas from "html2canvas";
 import type { FC } from "react";
 import { useRecoilValue } from "recoil";
 import { GlobalState } from "../..";
@@ -49,21 +48,22 @@ const DownLoadImage: FC<any> = (props) => {
 
 		// 源图像的宽高
 		const originImageWidth = Number(imageHtml.getAttribute("originWidth"));
-		const originImageHeight = Number(
-			imageHtml.getAttribute("originHeight")
-		);
+		const originImageHeight = Number(imageHtml.getAttribute("originHeight"));
 
 		// 页面中的图像宽高
 		const contentImageWidth = config.img.getBoundingClientRect().width;
+		const contentImageHeight = config.img.getBoundingClientRect().height;
 
 		// 根据页面中图像的大小 与 只需要显示的区域，进行除法，得出一个占据的百分比
-		const area = config.width / contentImageWidth;
+		const areaW = config.width / contentImageWidth;
+		const areaH = config.height / contentImageHeight;
 
 		tempCanvas.width = config.width;
 		tempCanvas.height = config.height;
 
 		const tempCtx = tempCanvas.getContext("2d")!;
 
+		// 画布裁切
 		drawRoundedRect(
 			tempCtx,
 			0,
@@ -72,16 +72,14 @@ const DownLoadImage: FC<any> = (props) => {
 			config.height,
 			borderRadius
 		);
-
-		// 画布裁切
 		tempCtx.clip();
 
 		tempCtx.drawImage(
 			imageHtml,
 			0,
 			0,
-			originImageWidth * area,
-			originImageHeight,
+			originImageWidth * areaW,
+			originImageHeight * areaH,
 			0,
 			0,
 			config.width,
@@ -149,28 +147,6 @@ const DownLoadImage: FC<any> = (props) => {
 		document.body.removeChild(dlLink);
 	};
 
-    const getShareImgBase64 = () => {
-
-        const dom = document.querySelector('#drawImage_container')?.firstChild as any
-        
-        if (dom) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                  html2canvas(dom, {
-                    useCORS: true, // 【重要】开启跨域配置
-                    scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2,
-                    allowTaint: true, // 允许跨域图片
-                  }).then((canvas) => {
-                    const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                    resolve(imgData);
-                  });
-                }, 300); // 这里加上 300ms 的延迟是为了让 DOM 元素完全渲染完成后再进行图片的生成
-              });
-        }
-
-        return Promise.resolve();
-    }
-
 	return (
 		<div
 			style={{
@@ -187,9 +163,8 @@ const DownLoadImage: FC<any> = (props) => {
 			>
 				下载
 			</Button>
-            <Button onClick={getShareImgBase64}>html2Canvas</Button>
 		</div>
 	);
-;
+};
 
 export default DownLoadImage;
