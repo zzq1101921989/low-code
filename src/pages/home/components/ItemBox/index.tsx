@@ -33,12 +33,14 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 
 	const { borderRadius } = useRecoilValue(GlobalState);
 
-	const [{ maskFlag, width: imageWidth, height: imageHeight }, setItemBoxConfig] = useState({
+	const [itemBoxConfig, setItemBoxConfig] = useState({
         maskFlag: true,
         width: 0,
         height: 0,
     });
 
+    const { maskFlag, width: imageWidth, height: imageHeight } = itemBoxConfig
+ 
 
 	// 计算高度缩放比例
     const scaleWidth = width / imageWidth
@@ -122,7 +124,15 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			</svg>
 
 			{/* 叉叉 */}
-			<span className={styles.close}>
+			<span className={styles.close} onClick={() => {
+                if (image.current?.getAttribute('xlink:href')) {
+                    image.current?.setAttribute('xlink:href', '')
+                    setItemBoxConfig({
+                        ...itemBoxConfig,
+                        maskFlag: true
+                    })
+                }
+            }}>
 				<svg
 					version="1.1"
 					id="图层_1"
