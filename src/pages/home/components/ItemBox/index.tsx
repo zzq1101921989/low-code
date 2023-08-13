@@ -26,46 +26,43 @@ interface ItemBoxProps {
 }
 
 const ItemBox: FC<ItemBoxProps> = (props) => {
-    
 	const { activeIndex, dataIndex, width, height } = props;
 
-    const image = useRef<SVGImageElement | null>(null);
+	const image = useRef<SVGImageElement | null>(null);
 
 	const { borderRadius } = useRecoilValue(GlobalState);
 
 	const [itemBoxConfig, setItemBoxConfig] = useState({
-        maskFlag: true,
-        width: 0,
-        height: 0,
-    });
-    const { maskFlag, width: imageWidth, height: imageHeight } = itemBoxConfig
- 
+		maskFlag: true,
+		width: 0,
+		height: 0,
+	});
+	const { maskFlag, width: imageWidth, height: imageHeight } = itemBoxConfig;
 
 	// 计算高度缩放比例
-    const scaleWidth = width / imageWidth
-    const scaleHeight = height / imageHeight
-    let calcImageWidth = 0
-    let calcHeight = 0
-    if (imageWidth && imageHeight) {
-        if (width > height) {
-            calcImageWidth = imageWidth * scaleWidth
-            calcHeight = imageHeight * scaleWidth
-            if (calcHeight < height) {
-                const scale = height / calcHeight
-                calcImageWidth = calcImageWidth * scale
-                calcHeight = calcHeight * scale
-            }
-        }
-        else {
-            calcImageWidth = imageWidth * scaleHeight
-            calcHeight = imageHeight * scaleHeight
-            if (calcImageWidth < width) {
-                const scale = width / calcImageWidth
-                calcImageWidth = calcImageWidth * scale
-                calcHeight = calcHeight * scale
-            }
-        }
-    }
+	const scaleWidth = width / imageWidth;
+	const scaleHeight = height / imageHeight;
+	let calcImageWidth = 0;
+	let calcHeight = 0;
+	if (imageWidth && imageHeight) {
+		if (width > height) {
+			calcImageWidth = imageWidth * scaleWidth;
+			calcHeight = imageHeight * scaleWidth;
+			if (calcHeight < height) {
+				const scale = height / calcHeight;
+				calcImageWidth = calcImageWidth * scale;
+				calcHeight = calcHeight * scale;
+			}
+		} else {
+			calcImageWidth = imageWidth * scaleHeight;
+			calcHeight = imageHeight * scaleHeight;
+			if (calcImageWidth < width) {
+				const scale = width / calcImageWidth;
+				calcImageWidth = calcImageWidth * scale;
+				calcHeight = calcHeight * scale;
+			}
+		}
+	}
 
 	const handlerBorder = () => {
 		if (maskFlag) {
@@ -85,27 +82,70 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 		}
 	};
 
-    useEffect(() => {
-        const load = () => {
-            setItemBoxConfig({
-                maskFlag: false,
-                width: Number(image.current?.getAttribute('originWidth')),
-                height: Number(image.current?.getAttribute('originHeight'))
-            })
-        }
-        image.current?.addEventListener("load", load);
-        return () => {
-            image.current?.removeEventListener('load', load)
-        }
-    }, [])
+	const initOnMouseEventHandler = () => {
+		// 是否按下的标志
+		let flag = 0;
+		// 初始按下的位置x y
+		let startX = 0,
+			startY = 0;
+		// 上次移动的距离是多少
+		let prevMoveX = 0,
+			prevMoveY = 0;
+
+		return {
+			onMouseDown: (e: MouseEvent) => {
+                console.log('电解镍');
+				flag = 1;
+				startX = e.clientX;
+				startY = e.clientY;
+			},
+			onMouseMove: (e: MouseEvent) => {
+				if (flag === 1) {
+					// 本次在屏幕中滑动的距离是多少
+					const screenMoveX = e.clientX - startX;
+					const screenMoveY = e.clientY - startY;
+					image.current?.setAttribute("x", prevMoveX + screenMoveX + "");
+					image.current?.setAttribute("y", prevMoveY + screenMoveY + "");
+				}
+			},
+			onMouseUp: (e: MouseEvent) => {
+				const screenMoveX = e.clientX - startX;
+				const screenMoveY = e.clientY - startY;
+				if (flag === 1) {
+                    flag = 0;
+                    prevMoveX = screenMoveX;
+				    prevMoveY = screenMoveY;
+                }
+			
+			},
+		};
+	};
+
+	useEffect(() => {
+		const load = () => {
+			setItemBoxConfig({
+				maskFlag: false,
+				width: Number(image.current?.getAttribute("originWidth")),
+				height: Number(image.current?.getAttribute("originHeight")),
+			});
+		};
+		image.current?.addEventListener("load", load);
+		return () => {
+			image.current?.removeEventListener("load", load);
+		};
+	}, []);
 
 	return (
-		<div 
-            className={styles.itemBox}
-            style={{
-                borderRadius
-            }}
-        >
+		<div
+			className={styles.itemBox}
+			style={{
+				borderRadius,
+				...(!maskFlag && {
+					cursor: "all-scroll",
+				}),
+			}}
+			{...(!maskFlag && initOnMouseEventHandler())}
+		>
 			<svg
 				view-box={`0 0 ${width} ${height}`}
 				xmlns="http://www.w3.org/2000/svg"
@@ -118,22 +158,25 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 				>
 					<image
 						ref={image}
-                        width={calcImageWidth}
+						width={calcImageWidth}
 						height={calcHeight}
 					/>
 				</g>
 			</svg>
 
 			{/* 叉叉 */}
-			<span className={styles.close} onClick={() => {
-                if (image.current?.getAttribute('xlink:href')) {
-                    image.current?.setAttribute('xlink:href', '')
-                    setItemBoxConfig({
-                        ...itemBoxConfig,
-                        maskFlag: true
-                    })
-                }
-            }}>
+			<span
+				className={styles.close}
+				onClick={() => {
+					if (image.current?.getAttribute("xlink:href")) {
+						image.current?.setAttribute("xlink:href", "");
+						setItemBoxConfig({
+							...itemBoxConfig,
+							maskFlag: true,
+						});
+					}
+				}}
+			>
 				<svg
 					version="1.1"
 					id="图层_1"
