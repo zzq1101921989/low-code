@@ -38,7 +38,6 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
         width: 0,
         height: 0,
     });
-
     const { maskFlag, width: imageWidth, height: imageHeight } = itemBoxConfig
  
 
@@ -47,22 +46,24 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
     const scaleHeight = height / imageHeight
     let calcImageWidth = 0
     let calcHeight = 0
-    if (width > height) {
-        calcImageWidth = imageWidth * scaleWidth
-        calcHeight = imageHeight * scaleWidth
-        if (calcHeight < height) {
-            const scale = height / calcHeight
-            calcImageWidth = calcImageWidth * scale
-            calcHeight = calcHeight * scale
+    if (imageWidth && imageHeight) {
+        if (width > height) {
+            calcImageWidth = imageWidth * scaleWidth
+            calcHeight = imageHeight * scaleWidth
+            if (calcHeight < height) {
+                const scale = height / calcHeight
+                calcImageWidth = calcImageWidth * scale
+                calcHeight = calcHeight * scale
+            }
         }
-    }
-    else {
-        calcImageWidth = imageWidth * scaleHeight
-        calcHeight = imageHeight * scaleHeight
-        if (calcImageWidth < width) {
-            const scale = width / calcImageWidth
-            calcImageWidth = calcImageWidth * scale
-            calcHeight = calcHeight * scale
+        else {
+            calcImageWidth = imageWidth * scaleHeight
+            calcHeight = imageHeight * scaleHeight
+            if (calcImageWidth < width) {
+                const scale = width / calcImageWidth
+                calcImageWidth = calcImageWidth * scale
+                calcHeight = calcHeight * scale
+            }
         }
     }
 

@@ -51,13 +51,35 @@ const DrawImage: FC<any> = () => {
 
 	const [activeBoxIndex, setActiveBoxIndex] = useState<number | undefined>();
 
+	/**
+	 * 通过image标签获取图片源的真实大小
+	 * @param urlData
+	 * @returns
+	 */
+	const getOriginImageSize = (
+		urlData: string
+	): Promise<{ width: number; height: number }> => {
+		return new Promise((resolve) => {
+			let img: HTMLImageElement | null = new Image();
+			// 图像加载完成后的回调函数
+			img.onload = function () {
+				// 获取图像的宽度和高度
+				const width = img!.width;
+				const height = img!.height;
+				img = null;
+				resolve({
+					width,
+					height,
+				});
+			};
+			// 将图像的源设置为已加载的图片数据
+			img.src = urlData;
+		});
+	};
+
 	// 组织右键菜单的默认事件
 	useEffect(() => {
 		const uploadBtn = document.getElementById("uploadBtn");
-
-		const contextmenuFn = (e: MouseEvent) => {
-			e.preventDefault();
-		};
 
 		const mousedownFn = (e: any) => {
 			if (e.target && (e.button === 0 || e.button === 2)) {
@@ -91,61 +113,6 @@ const DrawImage: FC<any> = () => {
 			fileRef.current?.click();
 		};
 
-		/**
-		 * 通过image标签获取图片源的真实大小
-		 * @param urlData
-		 * @returns
-		 */
-		const getOriginImageSize = (
-			urlData: string
-		): Promise<{ width: number; height: number }> => {
-			return new Promise((resolve) => {
-				let img: HTMLImageElement | null = new Image();
-				// 图像加载完成后的回调函数
-				img.onload = function () {
-					// 获取图像的宽度和高度
-					const width = img!.width;
-					const height = img!.height;
-					img = null;
-					resolve({
-						width,
-						height,
-					});
-				};
-				// 将图像的源设置为已加载的图片数据
-				img.src = urlData;
-			});
-		};
-
-		const readerFile = async (e: any) => {
-			const file = e.target.files[0];
-			const urlData = URL.createObjectURL(file);
-			const container = pendingUplaodBox.current as HTMLElement;
-			const image = container.getElementsByTagName("image")[0];
-			if (image) {
-				const { width, height } = await getOriginImageSize(urlData);
-
-				// 显示图片
-				image.setAttributeNS(
-					"http://www.w3.org/1999/xlink",
-					"xlink:href",
-					urlData
-				);
-				image.setAttribute("originWidth", width + "");
-				image.setAttribute("originHeight", height + "");
-
-				// 防止内存泄露，释放图片内存
-				image.addEventListener("load", () => {
-					URL.revokeObjectURL(urlData);
-				});
-
-				// 解决上传同一个文件，浏览器认为没变化，而造成读取失败的问题
-				fileRef.current!.value = "";
-			}
-
-			setContextMenu(initContextMenu);
-		};
-
 		const outsideCloseMenuContext = (e: MouseEvent) => {
 			if (e.target?.id === "drawImage_container") {
 				setContextMenu({
@@ -156,19 +123,14 @@ const DrawImage: FC<any> = () => {
 
 		uploadBtn?.addEventListener("click", click);
 
-		fileRef.current?.addEventListener("change", readerFile);
-
 		document.body.addEventListener("click", outsideCloseMenuContext);
 
 		if (ele.current) {
-			ele.current.addEventListener("contextmenu", contextmenuFn);
 			ele.current.addEventListener("mousedown", mousedownFn);
 		}
 
 		return () => {
 			uploadBtn?.removeEventListener("click", click);
-			fileRef.current?.removeEventListener("change", readerFile);
-			ele.current?.removeEventListener("contextmenu", contextmenuFn);
 			ele.current?.removeEventListener("mousedown", mousedownFn);
 			document.body.removeEventListener("click", outsideCloseMenuContext);
 		};
@@ -227,7 +189,6 @@ const DrawImage: FC<any> = () => {
 		let occupyH = occupyHeight;
 
 		layout.forEach((lay) => {
-
 			// 子元素 布局的方向
 			const { dirW, dirH, children, direction, isTop, flagNum } = lay;
 
@@ -263,11 +224,11 @@ const DrawImage: FC<any> = () => {
 
 				const currnetW =
 					contaW * dirW -
-					( (isLeftLayout && flagNum) ? flagNum * padding : 0);
+					(isLeftLayout && flagNum ? flagNum * padding : 0);
 				const currnetH =
 					contaH * dirH -
-					( (isTopLayout && flagNum) ? flagNum * padding : 0);
-                    
+					(isTopLayout && flagNum ? flagNum * padding : 0);
+
 				elements = elements.concat(
 					handlerLayout(
 						children,
@@ -279,8 +240,8 @@ const DrawImage: FC<any> = () => {
 					)
 				);
 
-				if (parentDirection === 'left') occupyW += currnetW;
-				if (parentDirection === 'top') occupyH += currnetH;
+				if (parentDirection === "left") occupyW += currnetW;
+				if (parentDirection === "top") occupyH += currnetH;
 			}
 			// 没有子元素
 			else {
@@ -354,6 +315,9 @@ const DrawImage: FC<any> = () => {
 					width: maxContainerWidth,
 					height: maxContainerHeight,
 				}}
+                onContextMenu={(e) => {
+                    e.preventDefault();
+                }}
 			>
 				{handlerLayout(
 					testLayoutCofig,
@@ -375,6 +339,39 @@ const DrawImage: FC<any> = () => {
 					id="cellImgPicker"
 					accept="image/jpeg,image/png"
 					style={{ display: "none" }}
+					onChange={async (e) => {
+						const file = e.target.files?.[0];
+						if (file) {
+							const urlData = URL.createObjectURL(file);
+							const container =
+								pendingUplaodBox.current as HTMLElement;
+							const image =
+								container.getElementsByTagName("image")[0];
+							if (image) {
+								const { width, height } =
+									await getOriginImageSize(urlData);
+
+								// 显示图片
+								image.setAttributeNS(
+									"http://www.w3.org/1999/xlink",
+									"xlink:href",
+									urlData
+								);
+								image.setAttribute("originWidth", width + "");
+								image.setAttribute("originHeight", height + "");
+
+								// 防止内存泄露，释放图片内存
+								image.addEventListener("load", () => {
+									URL.revokeObjectURL(urlData);
+								});
+
+								// 解决上传同一个文件，浏览器认为没变化，而造成读取失败的问题
+								fileRef.current!.value = "";
+							}
+
+							setContextMenu(initContextMenu);
+						}
+					}}
 				/>
 			</div>
 		</div>
