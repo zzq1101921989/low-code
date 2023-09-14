@@ -50,6 +50,7 @@ const DownLoadImage: FC<any> = (props) => {
 		const originImageWidth = Number(imageHtml.getAttribute("originWidth"));
 		const originImageHeight = Number(imageHtml.getAttribute("originHeight"));
 
+        // 图片有没有发生移动
 		const moveX = Math.abs(Number(imageHtml.getAttribute("x"))) || 0;
 		const moveY = Math.abs(Number(imageHtml.getAttribute("y"))) || 0;
 
@@ -60,12 +61,10 @@ const DownLoadImage: FC<any> = (props) => {
 		const contentImageHeight = config.img.getBoundingClientRect().height;
         
 
-		// 根据页面中图像的大小 与 只需要显示的区域，进行除法，得出一个占据的百分比
+		// ( 只需要显示的区域 / 页面中图像的大小 ) ，进行除法，得出一个占据的百分比
 		const areaW = config.width / contentImageWidth;
 		const areaH = config.height / contentImageHeight;
 
-        console.log(areaW, 'areaW');
-        
 
 		tempCanvas.width = config.width;
 		tempCanvas.height = config.height;
@@ -82,13 +81,23 @@ const DownLoadImage: FC<any> = (props) => {
 			borderRadius
 		);
 		tempCtx.clip();
-
+        
+        /**
+         * 实际绘制的图片的大小，针对的是源文件，大小也是 originWidth 所保存的，
+         * 所以在页面上【操作移动缩放】过后，都是需要一个比例数据的计算才能，还原页面上的操作到生成的canvas中，
+         */
 		tempCtx.drawImage(
+
 			imageHtml,
+
+            // 页面上显示的是图片是根据源图像缩放而来，所以借助这个比例，我们在移动的时候也是需要乘以这个比例
 			moveX * (originImageWidth / contentImageWidth),
 			moveY * (originImageWidth / contentImageWidth),
+
+            // 在页面上显示了多少部分的内容，那么在源图像上，乘以这个比例，就能得到在源图像上应该显示多少内容
 			originImageWidth * areaW,
 			originImageHeight * areaH,
+
 			0,
 			0,
 			config.width,
