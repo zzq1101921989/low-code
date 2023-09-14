@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Document</title>
+	</head>
+	<body>
+		<script>
+			// 到了电影院，我不知道我现在处于的是第几排？那我怎么办？只能问前面的人，而前面的人也不知道是第几排，那么只能一直往前问了，直到第一排
+			const rowNumber = (n) => {
+				if (n === 1) {
+					return 1;
+				}
+				// 这里的递归条件不需要想太多，只需要考虑我如何知道，我前面的排数是多少，然后在他的基础上 + 1 就等于我所在的排数是多少了
+				return rowNumber(n - 1) + 1;
+			};
+			console.log(rowNumber(6));
+
+			// n 个台阶有多少中走法？已知每一次可以上1 / 2次台阶，要登上 n 台阶有多少中走法
+			// 每次的步伐都有两种，1或者2，所以有两类的走法
+			// 又知道 n 台阶走法其实是 = n-1台阶走法 + n-2台阶走法（比如f(3) = f(2) + f(1)）
+
+			const climbingStairs = (n) => {
+				// 这些都是已知的条件了，就不需要参与运算直接返回就好了
+				if (n === 1) return 1;
+				if (n === 2) return 2;
+				// 如一次先走的是一步，则还剩n-1个台阶来使用两种走法，而如果一次先走的是二步的话，则还剩n-2个台阶来使用两种走法
+				return climbingStairs(n - 1) + climbingStairs(n - 2);
+			};
+			console.log(climbingStairs(5));
+
+			const orgList = [
+				{
+					name: "广州分公司",
+					id: "gz",
+					parentId: "",
+				},
+				{
+					name: "上海分公司",
+					id: "sh",
+					parentId: "",
+				},
+				{
+					name: "广州市场部",
+					id: "gzsc",
+					parentId: "gz",
+				},  
+				{
+					name: "广州客户部",
+					id: "gzkf",
+					parentId: "gz",
+				},
+				{
+					name: "广州市场部1",
+					id: "gzsc1",
+					parentId: "gzsc",
+				},
+				{
+					name: "上海市场部",
+					id: "shcs",
+					parentId: "sh",
+				},
+			];
+            
+            // 思路：给定一个父级parentid，从而找到那些子部门，放到children属性中
+			function generateTree(list, parentId = '') {
+				const tree = []
+                list.forEach(item => {
+                    if (item.parentId === parentId) {
+                        const node = {
+                            ...item,
+                            children: generateTree(list, item.id)
+                        }
+                        tree.push(node)
+                    }
+                })
+                return tree
+			}
+
+			const treeData = generateTree(orgList);
+
+			console.log(treeData);
+			
+		</script>
+	</body>
+</html>

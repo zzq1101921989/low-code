@@ -94,7 +94,6 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 
 		return {
 			onMouseDown: (e: MouseEvent) => {
-                console.log('电解镍');
 				flag = 1;
 				startX = e.clientX;
 				startY = e.clientY;
@@ -113,8 +112,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 				const screenMoveY = e.clientY - startY;
 				if (flag === 1) {
                     flag = 0;
-                    prevMoveX = screenMoveX;
-				    prevMoveY = screenMoveY;
+                    prevMoveX += screenMoveX;
+				    prevMoveY += screenMoveY;
                 }
 			
 			},
@@ -170,6 +169,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 				onClick={() => {
 					if (image.current?.getAttribute("xlink:href")) {
 						image.current?.setAttribute("xlink:href", "");
+						image.current?.setAttribute("x", "");
+						image.current?.setAttribute("y", "");
 						setItemBoxConfig({
 							...itemBoxConfig,
 							maskFlag: true,
