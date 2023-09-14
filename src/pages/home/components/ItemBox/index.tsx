@@ -103,11 +103,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
                     // 本次在屏幕中滑动的距离是多少
                     const screenMoveX = e.clientX - startX;
                     const screenMoveY = e.clientY - startY;
-                    
                     if (calcImageWidth !== width) image.current?.setAttribute("x", prevMoveX + screenMoveX + "");
-
                     if (calcHeight !== height) image.current?.setAttribute("y", prevMoveY + screenMoveY + "");
-
                     
                 }
             },
