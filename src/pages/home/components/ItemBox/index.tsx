@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useRef, useState } from "react";
+import { FC, MouseEventHandler, memo, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { GlobalState } from "../..";
 import styles from "./index.module.less";
@@ -93,31 +93,31 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			prevMoveY = 0;
 
 		return {
-			onMouseDown: (e: MouseEvent) => {
-				flag = 1;
-				startX = e.clientX;
-				startY = e.clientY;
-			},
-			onMouseMove: (e: MouseEvent) => {
-				if (flag === 1) {
-					// 本次在屏幕中滑动的距离是多少
-					const screenMoveX = e.clientX - startX;
-					const screenMoveY = e.clientY - startY;
-					image.current?.setAttribute("x", prevMoveX + screenMoveX + "");
-					image.current?.setAttribute("y", prevMoveY + screenMoveY + "");
-				}
-			},
-			onMouseUp: (e: MouseEvent) => {
-				const screenMoveX = e.clientX - startX;
-				const screenMoveY = e.clientY - startY;
-				if (flag === 1) {
+            onMouseDown: (e: MouseEvent) => {
+                flag = 1;
+                startX = e.clientX;
+                startY = e.clientY;
+            },
+            onMouseMove: (e: MouseEvent) => {
+                if (flag === 1) {
+                    // 本次在屏幕中滑动的距离是多少
+                    const screenMoveX = e.clientX - startX;
+                    const screenMoveY = e.clientY - startY;
+                    image.current?.setAttribute("x", prevMoveX + screenMoveX + "");
+                    image.current?.setAttribute("y", prevMoveY + screenMoveY + "");
+                }
+            },
+            onMouseUp: (e: MouseEvent) => {
+                const screenMoveX = e.clientX - startX;
+                const screenMoveY = e.clientY - startY;
+                if (flag === 1) {
                     flag = 0;
                     prevMoveX += screenMoveX;
-				    prevMoveY += screenMoveY;
+                    prevMoveY += screenMoveY;
                 }
-			
-			},
-		};
+
+            },
+        } as unknown as Record<string, MouseEventHandler<HTMLDivElement>>;
 	};
 
 	useEffect(() => {
