@@ -50,13 +50,22 @@ const DownLoadImage: FC<any> = (props) => {
 		const originImageWidth = Number(imageHtml.getAttribute("originWidth"));
 		const originImageHeight = Number(imageHtml.getAttribute("originHeight"));
 
+		const moveX = Math.abs(Number(imageHtml.getAttribute("x"))) || 0;
+		const moveY = Math.abs(Number(imageHtml.getAttribute("y"))) || 0;
+
+        console.log(imageHtml, 'imageHtml');
+
 		// 页面中的图像宽高
 		const contentImageWidth = config.img.getBoundingClientRect().width;
 		const contentImageHeight = config.img.getBoundingClientRect().height;
+        
 
 		// 根据页面中图像的大小 与 只需要显示的区域，进行除法，得出一个占据的百分比
 		const areaW = config.width / contentImageWidth;
 		const areaH = config.height / contentImageHeight;
+
+        console.log(areaW, 'areaW');
+        
 
 		tempCanvas.width = config.width;
 		tempCanvas.height = config.height;
@@ -76,8 +85,8 @@ const DownLoadImage: FC<any> = (props) => {
 
 		tempCtx.drawImage(
 			imageHtml,
-			0,
-			0,
+			moveX * (originImageWidth / contentImageWidth),
+			moveY * (originImageWidth / contentImageWidth),
 			originImageWidth * areaW,
 			originImageHeight * areaH,
 			0,
