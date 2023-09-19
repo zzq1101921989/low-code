@@ -117,7 +117,7 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 					const screenMoveX = e.clientX - startX;
 					const screenMoveY = e.clientY - startY;
 
-					//TODO：这里要解决边界还能拖拽的问题
+					//TODO：这里要解决边界还能拖拽的问题 
 					if (calcImageWidth !== width)
 						image.current?.setAttribute(
 							"x",
