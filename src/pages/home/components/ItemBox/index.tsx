@@ -1,4 +1,11 @@
-import { FC, MouseEventHandler, memo, useEffect, useRef, useState } from "react";
+import {
+    FC,
+    MouseEventHandler,
+    memo,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { useRecoilValue } from "recoil";
 import { GlobalState } from "../..";
 import styles from "./index.module.less";
@@ -32,12 +39,16 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 
 	const { borderRadius } = useRecoilValue(GlobalState);
 
-	const [itemBoxConfig, setItemBoxConfig] = useState({
+	const [imageOriginConfig, setImageOriginConfig] = useState({
 		maskFlag: true,
 		width: 0,
 		height: 0,
 	});
-	const { maskFlag, width: imageWidth, height: imageHeight } = itemBoxConfig;
+	const {
+		maskFlag,
+		width: imageWidth,
+		height: imageHeight,
+	} = imageOriginConfig;
 
 	// 计算高度缩放比例
 	const scaleWidth = width / imageWidth;
@@ -93,37 +104,60 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			prevMoveY = 0;
 
 		return {
-            onMouseDown: (e: MouseEvent) => {
-                flag = 1;
-                startX = e.clientX;
-                startY = e.clientY;
-            },
-            onMouseMove: (e: MouseEvent) => {
-                if (flag === 1) {
-                    // 本次在屏幕中滑动的距离是多少
-                    const screenMoveX = e.clientX - startX;
-                    const screenMoveY = e.clientY - startY;
-                    if (calcImageWidth !== width) image.current?.setAttribute("x", prevMoveX + screenMoveX + "");
-                    if (calcHeight !== height) image.current?.setAttribute("y", prevMoveY + screenMoveY + "");
-                    
-                }
-            },
-            onMouseUp: (e: MouseEvent) => {
-                const screenMoveX = e.clientX - startX;
-                const screenMoveY = e.clientY - startY;
-                if (flag === 1) {
-                    flag = 0;
-                    prevMoveX += screenMoveX;
-                    prevMoveY += screenMoveY;
-                }
+			onMouseDown: (e: MouseEvent) => {
+				console.log("按下了");
+				flag = 1;
+				startX = e.clientX;
+				startY = e.clientY;
+			},
+			onMouseMove: (e: MouseEvent) => {
+				if (flag === 1) {
+					console.log("移动了");
+					// 本次在屏幕中滑动的距离是多少
+					const screenMoveX = e.clientX - startX;
+					const screenMoveY = e.clientY - startY;
 
-            },
-        } as unknown as Record<string, MouseEventHandler<HTMLDivElement>>;
+					//TODO：这里要解决边界还能拖拽的问题
+					if (calcImageWidth !== width)
+						image.current?.setAttribute(
+							"x",
+							prevMoveX + screenMoveX + ""
+						);
+					if (calcHeight !== height)
+						image.current?.setAttribute(
+							"y",
+							prevMoveY + screenMoveY + ""
+						);
+				}
+			},
+			// 从目标区域离开的时候会触发这个方法
+			onMouseOut: (e: MouseEvent) => {
+				console.log("离开区域了");
+				const screenMoveX = e.clientX - startX;
+				const screenMoveY = e.clientY - startY;
+				if (flag === 1) {
+					flag = 0;
+					prevMoveX += screenMoveX;
+					prevMoveY += screenMoveY;
+				}
+			},
+			onMouseUp: (e: MouseEvent) => {
+				console.log("在区域的时候放开了");
+
+				const screenMoveX = e.clientX - startX;
+				const screenMoveY = e.clientY - startY;
+				if (flag === 1) {
+					flag = 0;
+					prevMoveX += screenMoveX;
+					prevMoveY += screenMoveY;
+				}
+			},
+		} as unknown as Record<string, MouseEventHandler<HTMLDivElement>>;
 	};
 
 	useEffect(() => {
 		const load = () => {
-			setItemBoxConfig({
+			setImageOriginConfig({
 				maskFlag: false,
 				width: Number(image.current?.getAttribute("originWidth")),
 				height: Number(image.current?.getAttribute("originHeight")),
@@ -172,8 +206,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 						image.current?.setAttribute("xlink:href", "");
 						image.current?.setAttribute("x", "");
 						image.current?.setAttribute("y", "");
-						setItemBoxConfig({
-							...itemBoxConfig,
+						setImageOriginConfig({
+							...imageOriginConfig,
 							maskFlag: true,
 						});
 					}

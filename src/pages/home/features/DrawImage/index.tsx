@@ -23,6 +23,7 @@ const initContextMenu = {
 };
 
 const DrawImage: FC<any> = () => {
+    
 	const globalState = useRecoilValue(GlobalState);
 
 	const { color, paddingPercentage, borderSize, layoutConfig } = globalState;
