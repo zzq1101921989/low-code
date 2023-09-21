@@ -117,10 +117,8 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			const screenMoveY = e.clientY - startY;
 			if (flag === 1) {
 				flag = 0;
-				if (isLog) {
-					prevMoveX += screenMoveX;
-					prevMoveY += screenMoveY;
-				}
+				prevMoveX += screenMoveX;
+				prevMoveY += screenMoveY;
 			}
 		};
 
@@ -160,9 +158,10 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 							"x",
 							prevMoveX + screenMoveX + ""
 						);
-						isLog = true;
 					} else {
-						isLog = false;
+						flag = 0
+						prevMoveX += screenMoveX;
+						prevMoveY += screenMoveY;
 					}
 
 					if (calcHeight !== height) {
@@ -170,13 +169,6 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 							"y",
 							prevMoveY + screenMoveY + ""
 						);
-					}
-
-					// 有时候拖动的时候，拖到了边界，在边界停下来的那一刻的位置也是需要记录的，和松开鼠标一个道理
-					if (!isLog) {
-                        flag = 0
-						prevMoveX += screenMoveX;
-						prevMoveY += screenMoveY;
 					}
 				}
 			},
