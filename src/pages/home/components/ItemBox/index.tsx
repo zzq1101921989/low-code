@@ -96,62 +96,93 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 	const initOnMouseEventHandler = () => {
 		// 是否按下的标志
 		let flag = 0;
+
+		// 是否需要记录当前的移动距离
+		let isLog = false;
+
 		// 初始按下的位置x y
 		let startX = 0,
 			startY = 0;
+
 		// 上次移动的距离是多少
 		let prevMoveX = 0,
 			prevMoveY = 0;
 
+		/**
+		 * 释放鼠标的时候需要收集当前总共移动了多少距离
+		 * @param e
+		 */
+		const gatherMoveXY = (e: MouseEvent) => {
+			const screenMoveX = e.clientX - startX;
+			const screenMoveY = e.clientY - startY;
+			if (flag === 1) {
+				flag = 0;
+				if (isLog) {
+					prevMoveX += screenMoveX;
+					prevMoveY += screenMoveY;
+				}
+			}
+		};
+
 		return {
 			onMouseDown: (e: MouseEvent) => {
-				console.log("按下了");
 				flag = 1;
 				startX = e.clientX;
 				startY = e.clientY;
 			},
 			onMouseMove: (e: MouseEvent) => {
 				if (flag === 1) {
-					console.log("移动了");
 					// 本次在屏幕中滑动的距离是多少
 					const screenMoveX = e.clientX - startX;
 					const screenMoveY = e.clientY - startY;
 
-					//TODO：这里要解决边界还能拖拽的问题 
-					if (calcImageWidth !== width)
+					// 获取可移动的image元素距离屏幕最左侧的距离
+					const moveImageClientLeft =
+						image.current?.getBoundingClientRect().left || 0;
+					const containerClientLeft =
+						document
+							.getElementById("itemBox" + dataIndex)
+							?.getBoundingClientRect().left || 0;
+
+					// 获取可移动的image元素距离屏幕最左侧的距离
+					const moveImageClientRight =
+						image.current?.getBoundingClientRect().right;
+					const containerClientRight = document
+						.getElementById("itemBox" + dataIndex)
+						?.getBoundingClientRect().right;
+
+					if (
+						calcImageWidth !== width &&
+						(moveImageClientLeft < containerClientLeft ||
+							screenMoveX < 0)
+					) {
 						image.current?.setAttribute(
 							"x",
 							prevMoveX + screenMoveX + ""
 						);
-					if (calcHeight !== height)
+						isLog = true;
+					} else {
+						isLog = false;
+					}
+
+					if (calcHeight !== height) {
 						image.current?.setAttribute(
 							"y",
 							prevMoveY + screenMoveY + ""
 						);
+					}
+
+					// 有时候拖动的时候，拖到了边界，在边界停下来的那一刻的位置也是需要记录的，和松开鼠标一个道理
+					if (!isLog) {
+                        flag = 0
+						prevMoveX += screenMoveX;
+						prevMoveY += screenMoveY;
+					}
 				}
 			},
 			// 从目标区域离开的时候会触发这个方法
-			onMouseOut: (e: MouseEvent) => {
-				console.log("离开区域了");
-				const screenMoveX = e.clientX - startX;
-				const screenMoveY = e.clientY - startY;
-				if (flag === 1) {
-					flag = 0;
-					prevMoveX += screenMoveX;
-					prevMoveY += screenMoveY;
-				}
-			},
-			onMouseUp: (e: MouseEvent) => {
-				console.log("在区域的时候放开了");
-
-				const screenMoveX = e.clientX - startX;
-				const screenMoveY = e.clientY - startY;
-				if (flag === 1) {
-					flag = 0;
-					prevMoveX += screenMoveX;
-					prevMoveY += screenMoveY;
-				}
-			},
+			onMouseOut: gatherMoveXY,
+			onMouseUp: gatherMoveXY,
 		} as unknown as Record<string, MouseEventHandler<HTMLDivElement>>;
 	};
 
@@ -171,6 +202,7 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 
 	return (
 		<div
+			id={"itemBox" + dataIndex}
 			className={styles.itemBox}
 			style={{
 				borderRadius,
