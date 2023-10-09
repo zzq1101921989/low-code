@@ -1,3 +1,4 @@
+import { getElementBoundingClientRect } from "@/utils";
 import {
     FC,
     MouseEventHandler,
@@ -75,6 +76,10 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 		}
 	}
 
+	/**
+	 * 处理border的显示问题
+	 * @returns
+	 */
 	const handlerBorder = () => {
 		if (maskFlag) {
 			return {
@@ -96,9 +101,6 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 	const initOnMouseEventHandler = () => {
 		// 是否按下的标志
 		let flag = 0;
-
-		// 是否需要记录当前的移动距离
-		let isLog = false;
 
 		// 初始按下的位置x y
 		let startX = 0,
@@ -130,45 +132,70 @@ const ItemBox: FC<ItemBoxProps> = (props) => {
 			},
 			onMouseMove: (e: MouseEvent) => {
 				if (flag === 1) {
+
 					// 本次在屏幕中滑动的距离是多少
 					const screenMoveX = e.clientX - startX;
 					const screenMoveY = e.clientY - startY;
 
-					// 获取可移动的image元素距离屏幕最左侧的距离
-					const moveImageClientLeft =
-						image.current?.getBoundingClientRect().left || 0;
-					const containerClientLeft =
-						document
-							.getElementById("itemBox" + dataIndex)
-							?.getBoundingClientRect().left || 0;
+                    const itemBox = document.getElementById("itemBox" + dataIndex)!
 
 					// 获取可移动的image元素距离屏幕最左侧的距离
-					const moveImageClientRight =
-						image.current?.getBoundingClientRect().right;
-					const containerClientRight = document
-						.getElementById("itemBox" + dataIndex)
-						?.getBoundingClientRect().right;
+					const moveImageClientLeft = getElementBoundingClientRect(image.current!, 'left') || 0;
+					const containerClientLeft = getElementBoundingClientRect(itemBox, 'left') || 0;
 
-					if (
-						calcImageWidth !== width &&
-						(moveImageClientLeft < containerClientLeft ||
-							screenMoveX < 0)
-					) {
-						image.current?.setAttribute(
-							"x",
-							prevMoveX + screenMoveX + ""
-						);
-					} else {
-						flag = 0
-						prevMoveX += screenMoveX;
-						prevMoveY += screenMoveY;
-					}
+					// 获取可移动的image元素距离屏幕最右侧的距离
+					const moveImageClientRight = getElementBoundingClientRect(image.current!, 'right') || 0;
+					const containerClientRight = getElementBoundingClientRect(itemBox, 'right') || 0;
+                    
+                    // 获取可移动的image元素距离屏幕顶部的距离
+                    const moveImageClientTop = getElementBoundingClientRect(image.current!, 'top') || 0;
+                    const containerClientTop = getElementBoundingClientRect(itemBox, 'top') || 0;
+
+                    const moveImageClientBottom = getElementBoundingClientRect(image.current!, 'bottom') || 0;
+                    const containerClientBottom = getElementBoundingClientRect(itemBox, 'bottom') || 0;
+
+
+                    if (calcImageWidth !== width) {
+                        // 左移动
+                        if (screenMoveX > 0 && moveImageClientLeft < containerClientLeft ) {
+                            image.current?.setAttribute(
+                                "x",
+                                prevMoveX + screenMoveX + ""
+                            );
+                        }
+                        // 右移动
+                        else if (screenMoveX <= 0 && moveImageClientRight > containerClientRight) {
+                            image.current?.setAttribute(
+                                "x",
+                                prevMoveX + screenMoveX + ""
+                            );
+                        } else {
+                            flag = 0;
+                            prevMoveX += screenMoveX;
+                            prevMoveY += screenMoveY;
+                        }
+                    }
+                    
 
 					if (calcHeight !== height) {
-						image.current?.setAttribute(
-							"y",
-							prevMoveY + screenMoveY + ""
-						);
+                        // 向下移动
+                        if (screenMoveY > 0 && moveImageClientTop < containerClientTop) {
+                            image.current?.setAttribute(
+                                "y",
+                                prevMoveY + screenMoveY + ""
+                            );
+                        } 
+                        // 向上移动
+                        else if (screenMoveY <= 0  && moveImageClientBottom > containerClientBottom) {
+                            image.current?.setAttribute(
+                                "y",
+                                prevMoveY + screenMoveY + ""
+                            );
+                        } else {
+                            flag = 0;
+                            prevMoveX += screenMoveX;
+                            prevMoveY += screenMoveY;
+                        }
 					}
 				}
 			},
